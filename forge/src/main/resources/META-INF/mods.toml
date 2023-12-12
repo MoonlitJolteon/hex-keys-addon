@@ -1,0 +1,42 @@
+modLoader = "javafml"
+loaderVersion = "[43,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "hexkeys"
+version = "${version}"
+displayName = "Hex Keys"
+logoFile = "icon.png"
+authors = "MoonlitJolteon"
+description = '''
+Hex Keys: Accessing your inner thoughts
+'''
+
+[[dependencies.hexkeys]]
+modId = "forge"
+mandatory = true
+versionRange = "[43,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.hexkeys]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.19.2,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.hexkeys]]
+modId = "architectury"
+mandatory = true
+versionRange = "[6.5.85,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.hexkeys]]
+modId = "hexcasting"
+mandatory = true
+versionRange = "[0.10.3,)"
+ordering = "NONE"
+side = "BOTH"

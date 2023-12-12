@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "hexkeys",
+  "version": "${version}",
+  "name": "Hex Keys",
+  "description": "Hex Keys: Accessing your inner thoughts",
+  "authors": [
+    "MoonlitJolteon"
+  ],
+  "contact": {
+    "homepage": "https://hexkeys.munebase.dev",
+    "sources": "https://github.com/MoonlitJolteon/hex-keys-addon"
+  },
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.munebase.hexkeys.fabric.HexkeysFabric"
+    ],
+    "client": [
+      "dev.munebase.hexkeys.fabric.HexkeysClientFabric"
+    ]
+  },
+  "mixins": [
+    "hexkeys-common.mixins.json",
+    "hexkeys.mixins.json"
+  ],
+  "depends": {
+    "minecraft": ">=1.19.2",
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "fabric-language-kotlin": ">=1.9.0+kotlin.1.8.0",
+    "architectury": ">=6.5.85",
+    "hexcasting": ">=0.10.3"
+  }
+}
