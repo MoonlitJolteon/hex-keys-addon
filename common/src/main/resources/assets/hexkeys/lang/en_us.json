@@ -1,13 +1,14 @@
 {
   "item.hexkeys.dummy_item": "Dummy Item",
-  "hexcasting.spell.hexkeys:congrats": "Congrats",
+  "hexcasting.spell.hexkeys:kleins_chest": "Klein's Chest",
   "hexcasting.spell.hexkeys:signum": "Signum Purification",
   "hexcasting.spell.book.hexkeys:congrats": "Dum. Spell Actn.",
   "hexcasting.spell.book.hexkeys:signum": "Dum. Actn.",
-  "hexkeys.entry.dummy_spells": "Dummy Spells",
+  "hexkeys.entry.kleins_chest": "Klein's Chest",
   "hexkeys.entry.dummy_actions": "Dummy Actions",
-  "hexkeys.page.dummy_spells.congrats": "Accepts a player entity, tells them they are doing a good job.",
+  "hexkeys.page.kleins_chest.description": "Accesses a storage that works very similarly to an enderchest, and is double the size of a standard chest",
   "hexkeys.page.dummy_actions.signum": "Accepts a $(l:casting/101)number/$, returns -1 if it is negative, 0 if 0, 1 if positive.",
   "text.hexkeys.congrats": "Good job, %1$s!",
-  "text.hexkeys.congrats.player": "a Player"
+  "text.hexkeys.congrats.player": "a Player",
+  "container.kleins_chest": "Klein's Chest"
 }

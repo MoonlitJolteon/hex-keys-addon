@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.Action;
 import at.petrak.hexcasting.api.spell.math.HexDir;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
+import dev.munebase.hexkeys.casting.patterns.spells.greater.OpKleinChest;
 import kotlin.Triple;
 import dev.munebase.hexkeys.casting.patterns.math.OpSignum;
 import dev.munebase.hexkeys.casting.patterns.spells.OpCongrats;
@@ -18,9 +19,8 @@ public class HexkeysPatternRegistry {
     public static List<Triple<HexPattern, Identifier, Action>> PATTERNS = new ArrayList<>();
     public static List<Triple<HexPattern, Identifier, Action>> PER_WORLD_PATTERNS = new ArrayList<>();
     // IMPORTANT: be careful to keep the registration calls looking like this, or you'll have to edit the hexdoc pattern regex.
-    public static HexPattern CONGRATS = registerPerWorld(HexPattern.fromAngles("eed", HexDir.WEST), "congrats", new OpCongrats());
     public static HexPattern SIGNUM = register(HexPattern.fromAngles("edd", HexDir.NORTH_WEST), "signum", new OpSignum());
-
+    public static HexPattern KLEINS_CHEST = registerPerWorld(HexPattern.fromAngles("eawaeawqawwawqq", HexDir.SOUTH_EAST), "kleins_chest", new OpKleinChest());
     public static void init() {
         try {
             for (Triple<HexPattern, Identifier, Action> patternTriple : PATTERNS) {

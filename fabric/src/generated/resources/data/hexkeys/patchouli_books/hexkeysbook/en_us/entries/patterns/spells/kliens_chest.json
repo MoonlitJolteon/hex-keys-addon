@@ -1,0 +1,18 @@
+{
+  "name": "hexkeys.entry.kleins_chest",
+  "category": "hexcasting:patterns/great_spells",
+  "icon": "minecraft:spruce_sign",
+  "sortnum": 0,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexkeys:kleins_chest",
+      "anchor": "hexkeys:kleins_chest",
+      "input": "",
+      "output": "",
+      "text": "hexkeys.page.kleins_chest.description"
+    }
+  ]
+}
