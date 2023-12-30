@@ -7,7 +7,6 @@ import at.petrak.hexcasting.api.spell.math.HexPattern;
 import dev.munebase.hexkeys.casting.patterns.spells.greater.OpKleinChest;
 import kotlin.Triple;
 import dev.munebase.hexkeys.casting.patterns.math.OpSignum;
-import dev.munebase.hexkeys.casting.patterns.spells.OpCongrats;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
