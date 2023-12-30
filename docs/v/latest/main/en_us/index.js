@@ -131,7 +131,7 @@ function doCycleTexturesForever() {
   cycleTimeoutID = setTimeout(doCycleTexturesForever, 2000);
 }
 // these are filled by Jinja
-const BOOK_URL = "http://git-pages.munebase.dev";
+const BOOK_URL = "http://hexkeys.munebase.dev";
 const VERSION = "latest/main";
 const LANG = "en_us";
 // Creates an element in the form `<li><a href=${href}>${text}</a></li>`
