@@ -12,6 +12,7 @@ import dev.munebase.hexkeys.inventories.KleinInventory
 import dev.munebase.hexkeys.worldData.KleinStorageData
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.SimpleInventory
 import net.minecraft.screen.GenericContainerScreenHandler
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory
 import net.minecraft.server.network.ServerPlayerEntity
@@ -27,8 +28,11 @@ class OpKleinChest : SpellAction
 
         val player = ctx.caster
         val kleinInventory = KleinStorageData.getServerState(ctx.world.server).getKleinInventory(player.uuid)
-        val usedSlots = kleinInventory.stacks.filter { stack -> !stack.isEmpty }.size
-
+        var usedSlots = 0
+        for (i in 0 until kleinInventory.size()) {
+            if(!kleinInventory.getStack(i).isEmpty) usedSlots += 1
+        }
+        println(usedSlots)
         return Triple(
             Spell(player, kleinInventory),
             (baseCost + (costPerSlot * usedSlots)).toInt(),

@@ -1,5 +1,6 @@
 package dev.munebase.hexkeys;
 
+import dev.munebase.hexkeys.casting.HexKeysDiscoverers;
 import dev.munebase.hexkeys.registry.HexkeysIotaTypeRegistry;
 import dev.munebase.hexkeys.registry.HexkeysItemRegistry;
 import dev.munebase.hexkeys.registry.HexkeysPatternRegistry;
@@ -19,6 +20,7 @@ public class Hexkeys {
     public static void init() {
         LOGGER.info("Hex Keys says hello!");
 
+        HexKeysDiscoverers.init();
         HexkeysItemRegistry.init();
         HexkeysIotaTypeRegistry.init();
         HexkeysPatternRegistry.init();
