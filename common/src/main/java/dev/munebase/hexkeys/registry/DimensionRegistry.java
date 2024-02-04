@@ -13,6 +13,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.server.WorldGenerationProgressListenerFactory;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.structure.StructurePlacementData;
+import net.minecraft.structure.StructureTemplate;
+import net.minecraft.structure.StructureTemplateManager;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.DynamicRegistryManager;
@@ -31,6 +36,9 @@ import net.minecraft.world.level.UnmodifiableLevelProperties;
 import net.minecraft.world.level.storage.LevelStorage;
 
 import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
 
@@ -118,17 +126,17 @@ public class DimensionRegistry
 
 		LogHelper.info("New mindscape has been created: " + dimKey.getValue().toString());
 
-		final int PLATFORM_RADIUS = 16;
-		for (int x = -PLATFORM_RADIUS; x < PLATFORM_RADIUS; x++)
+
+		StructurePlacementData settings = (new StructurePlacementData()).setIgnoreEntities(true).setMirror(BlockMirror.NONE.NONE).setRotation(BlockRotation.NONE);
+		StructureTemplateManager manager = newMindscape.getStructureTemplateManager();
+		Identifier soulIslandLocation = new Identifier(Hexkeys.MOD_ID, "mindscape");
+
+		Optional<StructureTemplate> templateOptional = manager.getTemplate(soulIslandLocation);
+		if (templateOptional.isPresent())
 		{
-			for (int z = -PLATFORM_RADIUS; z < PLATFORM_RADIUS; z++)
-			{
-				newMindscape.setBlockState(new BlockPos(x, DimensionHelper.FLOOR_LEVEL, z), Blocks.GRASS_BLOCK.getDefaultState());
-				newMindscape.setBlockState(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 1, z), Blocks.DIRT.getDefaultState());
-				newMindscape.setBlockState(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 2, z), Blocks.DIRT.getDefaultState());
-				newMindscape.setBlockState(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 3, z), Blocks.DIRT.getDefaultState());
-				newMindscape.setBlockState(new BlockPos(x, DimensionHelper.FLOOR_LEVEL - 4, z), Blocks.STONE.getDefaultState());
-			}
+			StructureTemplate template = templateOptional.get();
+			BlockPos pos = new BlockPos(-template.getSize().getX() / 2, DimensionHelper.FLOOR_LEVEL - template.getSize().getY(), -template.getSize().getZ() / 2);
+			template.place(newMindscape, pos, new BlockPos(0, 0, 0), settings, newMindscape.random, 0);
 		}
 
 		return newMindscape;
