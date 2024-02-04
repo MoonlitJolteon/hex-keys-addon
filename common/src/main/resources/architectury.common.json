@@ -1,3 +1,8 @@
 {
-  "accessWidener": "hexkeys.accesswidener"
+  "accessWidener": "hexkeys.accesswidener",
+  "injected_interfaces": {
+    "net/minecraft/server/network/ServerPlayerEntity": [
+      "dev/munebase/hexkeys/utils/IEntityDataSaver"
+    ]
+  }
 }

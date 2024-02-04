@@ -2,6 +2,8 @@ package dev.munebase.hexkeys;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 
 import java.nio.file.Path;
 
@@ -29,6 +31,16 @@ public class HexkeysAbstractions {
     @ExpectPlatform
     public static Path getConfigDirectory() {
         // Just throw an error, the content should get replaced at runtime.
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static void processAddingDim(MinecraftServer server, ServerWorld world) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static void commonSetup() {
         throw new AssertionError();
     }
 }
