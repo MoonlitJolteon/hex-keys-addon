@@ -135,47 +135,46 @@ publishMods {
     changelog = getLatestChangelog()
     type = STABLE
     modLoaders.add("fabric")
-    modLoaders.add("quilt")
 
     version = project.version + "-fabric"
     displayName = "Hex Keys $project.version [Fabric]"
 
     // Uncomment your desired platform(s)
-//    curseforge {
-//        accessToken = project.curseforgeApiToken
-//        projectId = project.curseforgeId
-//        minecraftVersions.add(minecraftVersion)
-//
-//        requires{
-//            slug = "fabric-api"
-//        }
-//        requires {
-//            slug = "architectury-api"
-//        }
-//        requires {
-//            slug = "fabric-language-kotlin"
-//        }
-//        requires {
-//            slug = "hexcasting"
-//        }
-//    }
-//
-//    modrinth {
-//        accessToken = project.modrinthApiToken
-//        projectId = project.modrinthId
-//        minecraftVersions.add("1.19.2")
-//
-//        requires{
-//            slug = "fabric-api"
-//        }
-//        requires {
-//            slug = "architectury-api"
-//        }
-//        requires {
-//            slug = "fabric-language-kotlin"
-//        }
-//        requires {
-//            slug = "hex-casting"
-//        }
-//    }
+    curseforge {
+        accessToken = project.curseforgeApiToken
+        projectId = project.curseforgeId
+        minecraftVersions.add(minecraftVersion)
+
+        requires{
+            slug = "fabric-api"
+        }
+        requires {
+            slug = "architectury-api"
+        }
+        requires {
+            slug = "fabric-language-kotlin"
+        }
+        requires {
+            slug = "hexcasting"
+        }
+    }
+
+    modrinth {
+        accessToken = project.modrinthApiToken
+        projectId = project.modrinthId
+        minecraftVersions.add("1.19.2")
+
+        requires{
+            slug = "fabric-api"
+        }
+        requires {
+            slug = "architectury-api"
+        }
+        requires {
+            slug = "fabric-language-kotlin"
+        }
+        requires {
+            slug = "hex-casting"
+        }
+    }
 }

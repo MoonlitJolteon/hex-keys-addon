@@ -104,6 +104,13 @@ public class DimensionHelper
 		);
 	}
 
+	public static boolean mindscapeExists(UUID playerUUID, MinecraftServer server) {
+		Identifier dim = prefix(playerUUID.toString());
+		RegistryKey<World> worldKey = RegistryKey.of(Registry.WORLD_KEY, dim);
+		ServerWorld mindscapeForPlayer = server.getWorld(worldKey);
+		return mindscapeForPlayer != null;
+	}
+
 	private static ServerWorld getOrCreateMindscape(UUID playerUUID, MinecraftServer server)
 	{
 		Identifier dim = prefix(playerUUID.toString());
