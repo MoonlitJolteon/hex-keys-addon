@@ -137,7 +137,7 @@ public class DimensionRegistry
 		if (templateOptional.isPresent())
 		{
 			StructureTemplate template = templateOptional.get();
-			BlockPos pos = new BlockPos(-template.getSize().getX() / 2, DimensionHelper.FLOOR_LEVEL - (template.getSize().getY() - 18), -template.getSize().getZ() / 2);
+			BlockPos pos = new BlockPos(-template.getSize().getX() / 2, DimensionHelper.FLOOR_LEVEL - (template.getSize().getY() - 20), -template.getSize().getZ() / 2);
 			template.place(newMindscape, pos, new BlockPos(0, 0, 0), settings, newMindscape.random, 0);
 		}
 
