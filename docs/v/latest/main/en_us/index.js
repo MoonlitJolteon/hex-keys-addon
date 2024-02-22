@@ -1,10 +1,10 @@
 "use strict";
 import semver from 'https://cdn.jsdelivr.net/npm/semver@7.5.4/+esm';
 // these are filled by Jinja
-const BOOK_URL = "http://hexkeys.munebase.dev";
+const BOOK_URL = "https://hexkeys.munebase.dev";
 const VERSION = "latest/main";
 const MINECRAFT_VERSION = "1.19.2";
-const FULL_VERSION = "0.0.1.1.0.dev0";
+const FULL_VERSION = "0.0.2.1.0.dev0";
 const LANG = "en_us";
 const SHOW_DROPDOWN_MINECRAFT_VERSION = "true" === "true";
 const DROPDOWN_MINECRAFT_TEMPLATE = "Minecraft {version}";
