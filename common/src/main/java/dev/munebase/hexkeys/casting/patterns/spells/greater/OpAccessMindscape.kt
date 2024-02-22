@@ -19,9 +19,9 @@ class OpAccessMindscape : SpellAction {
     override fun execute(args: List<Iota>, ctx: CastingContext): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val player: ServerPlayerEntity = ctx.caster
         var cost = 0
-        if(DimensionHelper.isInMindscape(player))
+        if (DimensionHelper.isInMindscape(player))
             cost = returnCost
-        else if(DimensionHelper.mindscapeExists(player.uuid, player.server))
+        else if (DimensionHelper.mindscapeExists(player.uuid, player.server))
             cost = transportCost
         else
             cost = creationCost

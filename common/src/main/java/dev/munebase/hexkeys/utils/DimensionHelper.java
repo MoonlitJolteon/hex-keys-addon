@@ -70,10 +70,12 @@ public class DimensionHelper
 				y = sharedSpawnPos.getY();
 				z = sharedSpawnPos.getZ();
 			}
+			player.getAbilities().allowFlying = player.isCreative(); // Remove flying if they aren't in creative mode
 		}
 		else
 		{
 			destination = getOrCreateMindscape(player.getUuid(), server);
+			player.getAbilities().allowFlying = true; // Allow flight in the mind
 		}
 
 		Identifier location = player.getEntityWorld().getDimensionKey().getValue();

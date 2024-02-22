@@ -32,7 +32,6 @@ class OpKleinChest : SpellAction
         for (i in 0 until kleinInventory.size()) {
             if(!kleinInventory.getStack(i).isEmpty) usedSlots += 1
         }
-        println(usedSlots)
         return Triple(
             Spell(player, kleinInventory),
             (baseCost + (costPerSlot * usedSlots)).toInt(),
