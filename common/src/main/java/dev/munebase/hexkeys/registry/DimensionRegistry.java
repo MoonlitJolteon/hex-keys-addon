@@ -5,6 +5,7 @@ import com.mojang.serialization.Lifecycle;
 import dev.munebase.hexkeys.Hexkeys;
 import dev.munebase.hexkeys.HexkeysAbstractions;
 import dev.munebase.hexkeys.dimensions.MindChunkGenerator;
+import dev.munebase.hexkeys.mixin.DefrostedRegistry;
 import dev.munebase.hexkeys.utils.DimensionHelper;
 import dev.munebase.hexkeys.utils.LogHelper;
 import dev.munebase.hexkeys.utils.ResourceLocHelper;
@@ -20,10 +21,7 @@ import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.DynamicRegistryManager;
-import net.minecraft.util.registry.MutableRegistry;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.util.registry.*;
 import net.minecraft.world.SaveProperties;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.source.BiomeAccess;
@@ -91,7 +89,11 @@ public class DimensionRegistry
 		if (dimRegistry instanceof MutableRegistry)
 		{
 			final MutableRegistry<DimensionOptions> mutableRegistry = (MutableRegistry<DimensionOptions>) dimRegistry;
+			boolean wasFrozen = ((DefrostedRegistry) mutableRegistry).getFrozen();
+			((DefrostedRegistry) mutableRegistry).setFrozen(false);
 			mutableRegistry.add(dimKey, dim, Lifecycle.stable());
+			if(wasFrozen)
+				((DefrostedRegistry) mutableRegistry).setFrozen(true);
 		}
 		else
 		{
@@ -135,7 +137,7 @@ public class DimensionRegistry
 		if (templateOptional.isPresent())
 		{
 			StructureTemplate template = templateOptional.get();
-			BlockPos pos = new BlockPos(-template.getSize().getX() / 2, DimensionHelper.FLOOR_LEVEL - template.getSize().getY(), -template.getSize().getZ() / 2);
+			BlockPos pos = new BlockPos(-template.getSize().getX() / 2, DimensionHelper.FLOOR_LEVEL - (template.getSize().getY() - 20), -template.getSize().getZ() / 2);
 			template.place(newMindscape, pos, new BlockPos(0, 0, 0), settings, newMindscape.random, 0);
 		}
 

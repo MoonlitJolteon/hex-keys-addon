@@ -20,7 +20,7 @@ public class HexkeysPatternRegistry {
     public static List<Triple<HexPattern, Identifier, Action>> PER_WORLD_PATTERNS = new ArrayList<>();
     // IMPORTANT: be careful to keep the registration calls looking like this, or you'll have to edit the hexdoc pattern regex.
     public static HexPattern SIGNUM = register(HexPattern.fromAngles("edd", HexDir.NORTH_WEST), "signum", new OpSignum());
-    public static HexPattern LIBRARY = register(HexPattern.fromAngles("qqqqqewdda", HexDir.NORTH_WEST), "library", new OpAccessMindscape());
+    public static HexPattern LIBRARY = register(HexPattern.fromAngles("qqqqqewwddada", HexDir.NORTH_WEST), "library", new OpAccessMindscape());
     public static HexPattern KLEINS_CHEST = registerPerWorld(HexPattern.fromAngles("eawaeawqawwawqq", HexDir.SOUTH_EAST), "kleins_chest", new OpKleinChest());
     public static void init() {
         try {

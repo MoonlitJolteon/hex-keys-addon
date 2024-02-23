@@ -70,10 +70,12 @@ public class DimensionHelper
 				y = sharedSpawnPos.getY();
 				z = sharedSpawnPos.getZ();
 			}
+			player.getAbilities().allowFlying = player.isCreative(); // Remove flying if they aren't in creative mode
 		}
 		else
 		{
 			destination = getOrCreateMindscape(player.getUuid(), server);
+			player.getAbilities().allowFlying = true; // Allow flight in the mind
 		}
 
 		Identifier location = player.getEntityWorld().getDimensionKey().getValue();
@@ -102,6 +104,13 @@ public class DimensionHelper
 				player.getHeadYaw(),
 				player.getPitch()
 		);
+	}
+
+	public static boolean mindscapeExists(UUID playerUUID, MinecraftServer server) {
+		Identifier dim = prefix(playerUUID.toString());
+		RegistryKey<World> worldKey = RegistryKey.of(Registry.WORLD_KEY, dim);
+		ServerWorld mindscapeForPlayer = server.getWorld(worldKey);
+		return mindscapeForPlayer != null;
 	}
 
 	private static ServerWorld getOrCreateMindscape(UUID playerUUID, MinecraftServer server)

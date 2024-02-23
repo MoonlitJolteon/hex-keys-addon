@@ -11,14 +11,24 @@ import dev.munebase.hexkeys.utils.DimensionHelper
 import net.minecraft.server.network.ServerPlayerEntity
 
 class OpAccessMindscape : SpellAction {
-    override val argc = 0;
-    val baseCost = MediaConstants.CRYSTAL_UNIT
+    override val argc = 0
+    val creationCost = MediaConstants.CRYSTAL_UNIT * (64 * 5) // 5 stacks
+    val transportCost = MediaConstants.CRYSTAL_UNIT
+    val returnCost = 0
 
     override fun execute(args: List<Iota>, ctx: CastingContext): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
-        val player: ServerPlayerEntity = ctx.caster;
+        val player: ServerPlayerEntity = ctx.caster
+        var cost = 0
+        if (DimensionHelper.isInMindscape(player))
+            cost = returnCost
+        else if (DimensionHelper.mindscapeExists(player.uuid, player.server))
+            cost = transportCost
+        else
+            cost = creationCost
+
         return Triple(
             Spell(player),
-            baseCost,
+            cost,
             listOf(ParticleSpray.burst(ctx.caster.pos, 1.0))
         )
     }
