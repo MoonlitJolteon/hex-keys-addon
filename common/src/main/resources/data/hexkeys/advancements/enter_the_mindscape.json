@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:story/form_obsidian",
+  "criteria": {
+    "entered_nether": {
+      "conditions": {
+        "to": "hexkeys:mindscape"
+      },
+      "trigger": "minecraft:changed_dimension"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.enter_the_mindscape.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:flint_and_steel",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.enter_the_mindscape.title"
+    }
+  },
+  "requirements": [
+    [
+      "entered_nether"
+    ]
+  ]
+}

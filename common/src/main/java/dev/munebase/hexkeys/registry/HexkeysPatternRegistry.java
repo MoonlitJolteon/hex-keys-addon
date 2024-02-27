@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.spell.Action;
 import at.petrak.hexcasting.api.spell.math.HexDir;
 import at.petrak.hexcasting.api.spell.math.HexPattern;
-import dev.munebase.hexkeys.casting.patterns.spells.greater.OpAccessMindscape;
+import dev.munebase.hexkeys.casting.patterns.spells.OpAccessMindscape;
 import dev.munebase.hexkeys.casting.patterns.spells.greater.OpKleinChest;
 import kotlin.Triple;
 import dev.munebase.hexkeys.casting.patterns.math.OpSignum;

@@ -7,8 +7,7 @@
     "HexkeysMixin"
   ],
   "mixins": [
-    "HexkeysEntityDataSaverMixin",
-    "DefrostedRegistry"
+    "HexkeysEntityDataSaverMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -4,7 +4,6 @@ import dev.munebase.hexkeys.utils.IEntityDataSaver;
 import dev.munebase.hexkeys.utils.PlayerHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

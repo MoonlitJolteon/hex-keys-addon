@@ -1,4 +1,4 @@
-package dev.munebase.hexkeys.casting.patterns.spells.greater
+package dev.munebase.hexkeys.casting.patterns.spells
 
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.spell.ParticleSpray
@@ -6,8 +6,11 @@ import at.petrak.hexcasting.api.spell.RenderedSpell
 import at.petrak.hexcasting.api.spell.SpellAction
 import at.petrak.hexcasting.api.spell.casting.CastingContext
 import at.petrak.hexcasting.api.spell.iota.Iota
-import dev.munebase.hexkeys.inventories.KleinInventory
+import dev.munebase.hexkeys.Hexkeys
 import dev.munebase.hexkeys.utils.DimensionHelper
+import dev.munebase.hexkeys.utils.PlayerHelper
+import dev.munebase.hexkeys.worldData.MindscapeStatus
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
 
 class OpAccessMindscape : SpellAction {
@@ -19,12 +22,18 @@ class OpAccessMindscape : SpellAction {
     override fun execute(args: List<Iota>, ctx: CastingContext): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
         val player: ServerPlayerEntity = ctx.caster
         var cost = 0
+        val mindscapeList = MindscapeStatus.getServerState(ctx.world.server)
+        val tag: NbtCompound = PlayerHelper.getPersistentTag(player, Hexkeys.IDENTIFIER.toString())
         if (DimensionHelper.isInMindscape(player))
             cost = returnCost
-        else if (DimensionHelper.mindscapeExists(player.uuid, player.server))
+        else if (mindscapeList.hasMindscape(player.uuid)) {
             cost = transportCost
-        else
+            tag.putString("CURRENT_MINDSCAPE_OWNER_UUID", player.uuidAsString)
+        }
+        else {
             cost = creationCost
+            tag.putString("CURRENT_MINDSCAPE_OWNER_UUID", player.uuidAsString)
+        }
 
         return Triple(
             Spell(player),
@@ -35,7 +44,7 @@ class OpAccessMindscape : SpellAction {
 
     private data class Spell(val player: ServerPlayerEntity) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
-            DimensionHelper.FlipDimension(player, player.server)
+            DimensionHelper.flipDimension(player, player.server)
         }
 
     }

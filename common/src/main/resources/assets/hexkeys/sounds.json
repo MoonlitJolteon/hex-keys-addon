@@ -1,0 +1,14 @@
+{
+  "bonk": {
+    "subtitle": "sounds.hexkeys.bonk",
+    "sounds": [
+      "hexkeys:bonk"
+    ]
+  },
+  "bonk2": {
+    "subtitle": "sounds.hexkeys.bonk2",
+    "sounds": [
+      "hexkeys:bonk2"
+    ]
+  }
+}

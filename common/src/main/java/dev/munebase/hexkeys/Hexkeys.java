@@ -34,6 +34,8 @@ public class Hexkeys {
         HexkeysBlocks.register();
         HexkeysItems.register();
 
+        DimensionRegistry.registerDimensions();
+
         LOGGER.info(HexkeysAbstractions.getConfigDirectory().toAbsolutePath().normalize().toString());
     }
 

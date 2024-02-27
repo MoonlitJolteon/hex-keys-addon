@@ -2,6 +2,7 @@ package dev.munebase.hexkeys.utils;
 
 import dev.munebase.hexkeys.Hexkeys;
 import dev.munebase.hexkeys.registry.DimensionRegistry;
+import dev.munebase.hexkeys.worldData.MindscapeStatus;
 import net.minecraft.client.util.math.Vector3d;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -16,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 
 import java.util.Locale;
+import java.util.Random;
 import java.util.UUID;
 
 public class DimensionHelper
@@ -35,13 +37,30 @@ public class DimensionHelper
 		return type != null && type.equals(world.getDimension());
 	}
 
-	public static void FlipDimension(ServerPlayerEntity player, MinecraftServer server)
+	public static void flipDimension(ServerPlayerEntity player, MinecraftServer server)
+	{
+		flipDimension(player, player.getUuid(), server);
+	}
+
+	public static BlockPos getMindscapePos(UUID mindscapeOwnerUUID) {
+		Random randX = new Random(mindscapeOwnerUUID.getLeastSignificantBits());
+		Random randY = new Random(mindscapeOwnerUUID.getMostSignificantBits());
+
+		double minimumSpacingBetweenIslands = 20_000;
+		double x = (minimumSpacingBetweenIslands * randX.nextInt(-1000, 1000));
+		double y = FLOOR_LEVEL + 2;
+		double z = (minimumSpacingBetweenIslands * randY.nextInt(-1000, 1000));
+		return new BlockPos(x, y, z);
+	}
+
+	public static void flipDimension(ServerPlayerEntity player, UUID mindscapeOwnerUUID, MinecraftServer server)
 	{
 		NbtCompound mindNBT = PlayerHelper.getPersistentTag(player, Hexkeys.IDENTIFIER.toString());
 		ServerWorld destination;
-		double x = 0.5;
+		BlockPos mindscapeLocation = getMindscapePos(mindscapeOwnerUUID);
+		double x = mindscapeLocation.getX() + 0.5;
 		double y = FLOOR_LEVEL + 2;
-		double z = 0.5;
+		double z = mindscapeLocation.getZ() + 0.5;
 
 		if (isInMindscape(player))
 		{
@@ -74,7 +93,7 @@ public class DimensionHelper
 		}
 		else
 		{
-			destination = getOrCreateMindscape(player.getUuid(), server);
+			destination = getOrCreateMindscape(player.getUuid(), new BlockPos(x, y, z), server);
 			player.getAbilities().allowFlying = true; // Allow flight in the mind
 		}
 
@@ -106,22 +125,18 @@ public class DimensionHelper
 		);
 	}
 
-	public static boolean mindscapeExists(UUID playerUUID, MinecraftServer server) {
-		Identifier dim = prefix(playerUUID.toString());
-		RegistryKey<World> worldKey = RegistryKey.of(Registry.WORLD_KEY, dim);
-		ServerWorld mindscapeForPlayer = server.getWorld(worldKey);
-		return mindscapeForPlayer != null;
-	}
-
-	private static ServerWorld getOrCreateMindscape(UUID playerUUID, MinecraftServer server)
+	private static ServerWorld getOrCreateMindscape(UUID playerUUID, BlockPos spawnLocation, MinecraftServer server)
 	{
-		Identifier dim = prefix(playerUUID.toString());
-		RegistryKey<World> worldKey = RegistryKey.of(Registry.WORLD_KEY, dim);
+		RegistryKey<World> worldKey = DimensionRegistry.Dimensions.MINDSCAPE_DIMENSION_KEY; //RegistryKey.of(Registry.WORLD_KEY, dim);
+		ServerWorld mindscape = server.getWorld(worldKey);
 
-		ServerWorld mindscapeForPlayer = server.getWorld(worldKey);
-		return mindscapeForPlayer != null
-				? mindscapeForPlayer
-				: DimensionRegistry.createMindscape(server, worldKey);
+		MindscapeStatus mindscapeList = MindscapeStatus.getServerState(server);
+		if(!mindscapeList.hasMindscape(playerUUID)) {
+			DimensionRegistry.createMindscape(server, spawnLocation);
+			mindscapeList.giveMindscape(playerUUID);
+		}
+
+		return mindscape;
 	}
 
 	private static Identifier prefix(String path)
