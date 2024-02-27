@@ -15,6 +15,7 @@
       "text": "hexkeys.page.mindscape.open"
     },
     {
+      "advancement": "hexkeys:enter_the_mindscape",
       "type": "patchouli:text",
       "text": "hexkeys.page.mindscape.1"
     }

@@ -20,7 +20,8 @@ import net.minecraft.text.Text
 
 class OpKleinChest : SpellAction
 {
-    override val argc = 0;
+    override val argc = 0
+    override val isGreat = true
     val baseCost = MediaConstants.SHARD_UNIT
     val costPerSlot = MediaConstants.DUST_UNIT * 0.25
 
