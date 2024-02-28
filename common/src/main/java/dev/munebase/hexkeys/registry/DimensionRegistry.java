@@ -1,11 +1,11 @@
 package dev.munebase.hexkeys.registry;
 
 import dev.munebase.hexkeys.Hexkeys;
-import dev.munebase.hexkeys.HexkeysAbstractions;
 import dev.munebase.hexkeys.dimensions.MindChunkGenerator;
-import dev.munebase.hexkeys.utils.DimensionHelper;
-import dev.munebase.hexkeys.utils.ResourceLocHelper;
+import dev.munebase.hexkeys.utils.*;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplate;
@@ -20,7 +20,11 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import dev.munebase.hexkeys.utils.DimensionHelper;
 
 public class DimensionRegistry
 {
@@ -79,5 +83,22 @@ public class DimensionRegistry
 		}
 
 		return mindscape;
+	}
+
+	public static void verifyMindscape(ServerWorld world)
+	{
+		if(!DimensionHelper.isDimensionOfType(world, DimensionTypes.MINDSCAPE_DIM_TYPE)) return;
+		List<ServerPlayerEntity> players = world.getPlayers();
+		players.forEach(player -> {
+			NbtCompound mindNBT = PlayerHelper.getPersistentTag(player, Hexkeys.IDENTIFIER.toString());
+			String mindscapeOwnerUUID = mindNBT.getString("CURRENT_MINDSCAPE_OWNER_UUID");
+			BlockPos mindscapeCenter = DimensionHelper.getMindscapePos(UUID.fromString(mindscapeOwnerUUID));
+			BlockPos playerPosition = player.getBlockPos();
+			double distanceFromCenter = MathHelper.distanceBetweenBlockPos(mindscapeCenter, playerPosition);
+			if(distanceFromCenter > 3000 || playerPosition.getY() < -60) {
+				player.fallDistance = 0;
+				player.teleport(mindscapeCenter.getX()+0.5, mindscapeCenter.getY(), mindscapeCenter.getZ()+0.5);
+			}
+		});
 	}
 }
