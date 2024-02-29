@@ -3,7 +3,7 @@
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:barrel",
   "sortnum": 0,
-  "advancement": "hexcasting:root",
+  "advancement": "hexcasting:enlightenment",
   "read_by_default": true,
   "pages": [
     {
@@ -20,6 +20,7 @@
     },
     {
       "type": "patchouli:text",
+      "advancement": "hexcasting:enlightenment",
       "text": "hexkeys.page.kleins.2"
     }
   ]
