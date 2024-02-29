@@ -7,7 +7,7 @@ license = "MIT"
 modId = "hexkeys"
 version = "${version}"
 displayName = "Hex Keys"
-logoFile = "icon.png"
+logoFile = "hexkeys.png"
 authors = "MoonlitJolteon"
 description = '''
 Hex Keys: Accessing your inner thoughts

@@ -12,7 +12,7 @@
     "sources": "https://github.com/MoonlitJolteon/hex-keys-addon"
   },
   "license": "MIT",
-  "icon": "icon.png",
+  "icon": "hexkeys.png",
   "environment": "*",
   "entrypoints": {
     "main": [
