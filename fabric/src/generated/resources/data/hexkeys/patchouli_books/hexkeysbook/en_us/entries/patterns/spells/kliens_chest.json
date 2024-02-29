@@ -3,7 +3,7 @@
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:barrel",
   "sortnum": 0,
-  "advancement": "hexcasting:root",
+  "advancement": "hexcasting:enlightened",
   "read_by_default": true,
   "pages": [
     {
