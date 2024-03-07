@@ -95,7 +95,7 @@ public class DimensionRegistry
 			BlockPos mindscapeCenter = DimensionHelper.getMindscapePos(UUID.fromString(mindscapeOwnerUUID));
 			BlockPos playerPosition = player.getBlockPos();
 			double distanceFromCenter = MathHelper.distanceBetweenBlockPos(mindscapeCenter, playerPosition);
-			if(distanceFromCenter > 3000 || playerPosition.getY() < -60) {
+			if(distanceFromCenter > 3000 || playerPosition.getY() < -40) {
 				player.fallDistance = 0;
 				player.teleport(mindscapeCenter.getX()+0.5, mindscapeCenter.getY(), mindscapeCenter.getZ()+0.5);
 			}

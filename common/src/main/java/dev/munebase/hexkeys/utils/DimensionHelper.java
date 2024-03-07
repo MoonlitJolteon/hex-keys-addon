@@ -93,7 +93,7 @@ public class DimensionHelper
 		}
 		else
 		{
-			destination = getOrCreateMindscape(player.getUuid(), new BlockPos(x, y, z), server);
+			destination = getOrCreateMindscape(mindscapeOwnerUUID, new BlockPos(x, y, z), server);
 			player.getAbilities().allowFlying = true; // Allow flight in the mind
 		}
 

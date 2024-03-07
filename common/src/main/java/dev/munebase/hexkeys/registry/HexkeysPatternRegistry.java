@@ -9,7 +9,6 @@ import dev.munebase.hexkeys.casting.patterns.spells.OpAccessMindscape;
 import dev.munebase.hexkeys.casting.patterns.spells.OpVisitMindscape;
 import dev.munebase.hexkeys.casting.patterns.spells.greater.OpKleinChest;
 import kotlin.Triple;
-import dev.munebase.hexkeys.casting.patterns.math.OpSignum;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;

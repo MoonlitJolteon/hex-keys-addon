@@ -26,13 +26,4 @@ public class HexkeysForge
 		bus.addListener(HexkeysClientForge::init);
 		Hexkeys.init();
 	}
-
-	@SubscribeEvent
-	public void worldTickEvent(TickEvent.LevelTickEvent event)
-	{
-		World world = event.level;
-		if(!world.isClient()) {
-			DimensionRegistry.verifyMindscape((ServerWorld) world);
-		}
-	}
 }
