@@ -46,7 +46,7 @@ public class DimensionHelper
 		Random randX = new Random(mindscapeOwnerUUID.getLeastSignificantBits());
 		Random randY = new Random(mindscapeOwnerUUID.getMostSignificantBits());
 
-		double minimumSpacingBetweenIslands = 20_000;
+		double minimumSpacingBetweenIslands = 20_000; // TODO: Add version detection and reduce this to 500, and ranges to be -5k to 5k
 		double x = (minimumSpacingBetweenIslands * randX.nextInt(-1000, 1000));
 		double y = FLOOR_LEVEL + 2;
 		double z = (minimumSpacingBetweenIslands * randY.nextInt(-1000, 1000));
@@ -89,7 +89,7 @@ public class DimensionHelper
 				y = sharedSpawnPos.getY();
 				z = sharedSpawnPos.getZ();
 			}
-			player.getAbilities().allowFlying = player.isCreative(); // Remove flying if they aren't in creative mode
+			player.getAbilities().allowFlying = mindNBT.getBoolean(NBTKeys.LAST_DIMENSION_COULD_FLY); // Remove flying if they aren't in creative mode
 		}
 		else
 		{
@@ -110,6 +110,9 @@ public class DimensionHelper
 			// save the dimension info
 			mindNBT.putString(NBTKeys.LAST_DIMENSION_MOD_ID, location.getNamespace());
 			mindNBT.putString(NBTKeys.LAST_DIMENSION_MOD_DIMENSION, location.getPath());
+
+			// save if they could fly pre-mindscape or not
+			mindNBT.putBoolean(NBTKeys.LAST_DIMENSION_COULD_FLY, player.getAbilities().allowFlying);
 		}
 
 		Vector3d newPosByDestination = new Vector3d(x,y,z);
@@ -151,5 +154,6 @@ public class DimensionHelper
 		public static final String LAST_DIMENSION_Z = "LAST_DIMENSION_Z";
 		public static final String LAST_DIMENSION_MOD_ID = "LAST_DIMENSION_MOD_ID";
 		public static final String LAST_DIMENSION_MOD_DIMENSION = "LAST_DIMENSION_MOD_DIMENSION";
+		public static final String LAST_DIMENSION_COULD_FLY = "LAST_DIMENSION_COULD_FLY";
 	}
 }
