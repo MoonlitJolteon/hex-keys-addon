@@ -11,6 +11,7 @@ import dev.munebase.hexkeys.casting.iotas.MindscapeIota
 import dev.munebase.hexkeys.casting.patterns.mishaps.MishapMindscapeDoesntExist
 import dev.munebase.hexkeys.casting.patterns.mishaps.MishapNotAMindscapeKey
 import dev.munebase.hexkeys.utils.DimensionHelper
+import dev.munebase.hexkeys.utils.DimensionHelper.NBTKeys
 import dev.munebase.hexkeys.utils.PlayerHelper
 import dev.munebase.hexkeys.worldData.MindscapeStatus
 import net.minecraft.nbt.NbtCompound
@@ -45,7 +46,8 @@ class OpVisitMindscape : SpellAction {
     private data class Spell(val player: ServerPlayerEntity, val mindscapeOwner: MindscapeIota) : RenderedSpell {
         override fun cast(ctx: CastingContext) {
             if(DimensionHelper.isInMindscape(player)) {
-                var mindscapePos = DimensionHelper.getMindscapePos(mindscapeOwner.player.uuid)
+                var mindNBT = PlayerHelper.getPersistentTag(player, Hexkeys.IDENTIFIER.toString())
+                var mindscapePos = DimensionHelper.getMindscapePos(mindscapeOwner.player.uuid, mindNBT.getInt(NBTKeys.MINDSCAPE_VERSION_NUM))
                 player.teleport(mindscapePos.x + 0.5, mindscapePos.y + 0.5, mindscapePos.z + 0.5)
             } else {
                 DimensionHelper.flipDimension(player, mindscapeOwner.player.uuid, player.server)

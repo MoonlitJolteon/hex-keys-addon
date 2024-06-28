@@ -92,7 +92,7 @@ public class DimensionRegistry
 		players.forEach(player -> {
 			NbtCompound mindNBT = PlayerHelper.getPersistentTag(player, Hexkeys.IDENTIFIER.toString());
 			String mindscapeOwnerUUID = mindNBT.getString("CURRENT_MINDSCAPE_OWNER_UUID");
-			BlockPos mindscapeCenter = DimensionHelper.getMindscapePos(UUID.fromString(mindscapeOwnerUUID));
+			BlockPos mindscapeCenter = DimensionHelper.getMindscapePos(UUID.fromString(mindscapeOwnerUUID), mindNBT.getInt(DimensionHelper.NBTKeys.MINDSCAPE_VERSION_NUM));
 			BlockPos playerPosition = player.getBlockPos();
 			double distanceFromCenter = MathHelper.distanceBetweenBlockPos(mindscapeCenter, playerPosition);
 			if(distanceFromCenter > 3000 || playerPosition.getY() < -40) {

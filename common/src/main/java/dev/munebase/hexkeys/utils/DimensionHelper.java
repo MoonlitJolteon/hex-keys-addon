@@ -42,14 +42,15 @@ public class DimensionHelper
 		flipDimension(player, player.getUuid(), server);
 	}
 
-	public static BlockPos getMindscapePos(UUID mindscapeOwnerUUID) {
+	public static BlockPos getMindscapePos(UUID mindscapeOwnerUUID, int version) {
 		Random randX = new Random(mindscapeOwnerUUID.getLeastSignificantBits());
 		Random randY = new Random(mindscapeOwnerUUID.getMostSignificantBits());
 
-		double minimumSpacingBetweenIslands = 20_000; // TODO: Add version detection and reduce this to 500, and ranges to be -5k to 5k
-		double x = (minimumSpacingBetweenIslands * randX.nextInt(-1000, 1000));
+		double minimumSpacingBetweenIslands = version == 0 ? 20_000 : 500;
+		int range = version == 0 ? 1000 : 2000;
+		double x = (minimumSpacingBetweenIslands * randX.nextInt(-range, range));
 		double y = FLOOR_LEVEL + 2;
-		double z = (minimumSpacingBetweenIslands * randY.nextInt(-1000, 1000));
+		double z = (minimumSpacingBetweenIslands * randY.nextInt(-range, range));
 		return new BlockPos(x, y, z);
 	}
 
@@ -57,7 +58,11 @@ public class DimensionHelper
 	{
 		NbtCompound mindNBT = PlayerHelper.getPersistentTag(player, Hexkeys.IDENTIFIER.toString());
 		ServerWorld destination;
-		BlockPos mindscapeLocation = getMindscapePos(mindscapeOwnerUUID);
+		MindscapeStatus mindscapeList = MindscapeStatus.getServerState(server);
+		if(!mindscapeList.hasMindscape(mindscapeOwnerUUID)) {
+			mindNBT.putInt(NBTKeys.MINDSCAPE_VERSION_NUM, 1);
+		}
+		BlockPos mindscapeLocation = getMindscapePos(mindscapeOwnerUUID, mindNBT.getInt(NBTKeys.MINDSCAPE_VERSION_NUM));
 		double x = mindscapeLocation.getX() + 0.5;
 		double y = FLOOR_LEVEL + 2;
 		double z = mindscapeLocation.getZ() + 0.5;
@@ -155,5 +160,6 @@ public class DimensionHelper
 		public static final String LAST_DIMENSION_MOD_ID = "LAST_DIMENSION_MOD_ID";
 		public static final String LAST_DIMENSION_MOD_DIMENSION = "LAST_DIMENSION_MOD_DIMENSION";
 		public static final String LAST_DIMENSION_COULD_FLY = "LAST_DIMENSION_COULD_FLY";
+		public static final String MINDSCAPE_VERSION_NUM = "MINDSCAPE_VERSION_NUM";
 	}
 }
