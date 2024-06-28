@@ -15,7 +15,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 
 class OpAccessMindscape : SpellAction {
     override val argc = 0
-    val creationCost = MediaConstants.CRYSTAL_UNIT * (64 * 5) // 5 stacks
+    val creationCost = MediaConstants.CRYSTAL_UNIT * (64) // 1 stack
     val transportCost = MediaConstants.CRYSTAL_UNIT
     val returnCost = 0
 
