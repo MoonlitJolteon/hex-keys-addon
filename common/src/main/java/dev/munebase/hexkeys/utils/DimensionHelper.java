@@ -95,18 +95,17 @@ public class DimensionHelper
 				z = sharedSpawnPos.getZ();
 			}
 			player.getAbilities().allowFlying = mindNBT.getBoolean(NBTKeys.LAST_DIMENSION_COULD_FLY); // Remove flying if they aren't in creative mode
+			if (!player.getAbilities().allowFlying && player.getAbilities().flying) player.getAbilities().flying = false;
 		}
 		else
 		{
 			destination = getOrCreateMindscape(mindscapeOwnerUUID, new BlockPos(x, y, z), server);
-			player.getAbilities().allowFlying = true; // Allow flight in the mind
 		}
 
 		Identifier location = player.getEntityWorld().getDimensionKey().getValue();
 
 		if (!isInMindscape(player))
 		{
-			mindNBT = PlayerHelper.getPersistentTag(player, Hexkeys.IDENTIFIER.toString());
 			// XYZ
 			mindNBT.putDouble(NBTKeys.LAST_DIMENSION_X, player.getX());
 			mindNBT.putDouble(NBTKeys.LAST_DIMENSION_Y, player.getY());
@@ -118,6 +117,7 @@ public class DimensionHelper
 
 			// save if they could fly pre-mindscape or not
 			mindNBT.putBoolean(NBTKeys.LAST_DIMENSION_COULD_FLY, player.getAbilities().allowFlying);
+			player.getAbilities().allowFlying = true; // Allow flight in the mind
 		}
 
 		Vector3d newPosByDestination = new Vector3d(x,y,z);
