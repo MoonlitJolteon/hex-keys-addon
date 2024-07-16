@@ -7,7 +7,8 @@
     "HexkeysMixin"
   ],
   "mixins": [
-    "HexkeysEntityDataSaverMixin"
+    "HexkeysEntityDataSaverMixin",
+    "HexkeysEntityPlayerDataCopyAfterDeathMixin"
   ],
   "injectors": {
     "defaultRequire": 1

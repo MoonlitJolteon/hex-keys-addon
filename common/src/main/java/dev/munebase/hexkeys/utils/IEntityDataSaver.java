@@ -7,4 +7,6 @@ public interface IEntityDataSaver
 	default NbtCompound getPersistentNbtData() {
 		return new NbtCompound();
 	};
+
+	default void setPersistentNbtData(NbtCompound persistentData) {};
 }

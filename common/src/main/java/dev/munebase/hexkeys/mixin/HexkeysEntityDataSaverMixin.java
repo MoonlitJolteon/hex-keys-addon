@@ -25,6 +25,12 @@ public abstract class HexkeysEntityDataSaverMixin implements IEntityDataSaver
 		return persistentData;
 	}
 
+	@Override
+	public void setPersistentNbtData(NbtCompound persistentData)
+	{
+		this.persistentData = persistentData;
+	}
+
 	@Inject(method = "writeNbt", at = @At("HEAD"))
 	protected void injectWriteMethod(NbtCompound nbt, CallbackInfoReturnable info)
 	{
