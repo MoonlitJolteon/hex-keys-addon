@@ -36,7 +36,7 @@ public class Hexkeys {
 
         DimensionRegistry.registerDimensions();
 
-        LOGGER.info(HexkeysAbstractions.getConfigDirectory().toAbsolutePath().normalize().toString());
+//        LOGGER.info(HexkeysAbstractions.getConfigDirectory().toAbsolutePath().normalize().toString());
     }
 
     /**
