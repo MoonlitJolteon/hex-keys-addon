@@ -18,8 +18,10 @@ import net.minecraft.util.registry.*;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -89,16 +91,36 @@ public class DimensionRegistry
 	{
 		if(!DimensionHelper.isDimensionOfType(world, DimensionTypes.MINDSCAPE_DIM_TYPE)) return;
 		List<ServerPlayerEntity> players = world.getPlayers();
+		List<ServerPlayerEntity> playersToReset = new ArrayList<>();
 		players.forEach(player -> {
 			NbtCompound mindNBT = PlayerHelper.getPersistentTag(player, Hexkeys.IDENTIFIER.toString());
 			String mindscapeOwnerUUID = mindNBT.getString("CURRENT_MINDSCAPE_OWNER_UUID");
-			BlockPos mindscapeCenter = DimensionHelper.getMindscapePos(UUID.fromString(mindscapeOwnerUUID), mindNBT.getInt(DimensionHelper.NBTKeys.MINDSCAPE_VERSION_NUM));
-			BlockPos playerPosition = player.getBlockPos();
-			double distanceFromCenter = MathHelper.distanceBetweenBlockPos(mindscapeCenter, playerPosition);
-			if(distanceFromCenter > 3000 || playerPosition.getY() < -40) {
-				player.fallDistance = 0;
-				player.teleport(mindscapeCenter.getX()+0.5, mindscapeCenter.getY(), mindscapeCenter.getZ()+0.5);
-			}
+			if (mindscapeOwnerUUID.length() > 0) {
+				BlockPos mindscapeCenter = DimensionHelper.getMindscapePos(UUID.fromString(mindscapeOwnerUUID), mindNBT.getInt(DimensionHelper.NBTKeys.MINDSCAPE_VERSION_NUM));
+				BlockPos playerPosition = player.getBlockPos();
+				double distanceFromCenter = MathHelper.distanceBetweenBlockPos(mindscapeCenter, playerPosition);
+				if(distanceFromCenter > 3000 || playerPosition.getY() < -40) {
+					player.fallDistance = 0;
+					player.teleport(mindscapeCenter.getX()+0.5, mindscapeCenter.getY(), mindscapeCenter.getZ()+0.5);
+				}
+			} else
+				playersToReset.add(player);
 		});
+		playersToReset.forEach(player -> {
+			ServerWorld spawnWorld = world.getServer().getWorld(player.getSpawnPointDimension());
+			BlockPos spawnPos = player.getSpawnPointPosition();
+			if(spawnPos == null) spawnPos = spawnWorld.getSpawnPos();
+			Hexkeys.LOGGER.info(player.getEntityName() + " got to the mindscape illegally.. sending them to their spawnpoint");
+			TeleportHelper.teleportEntity(
+					player,
+					spawnWorld,
+					spawnPos.getX(),
+					spawnPos.getY(),
+					spawnPos.getZ(),
+					player.getHeadYaw(),
+					player.getPitch()
+			);
+		});
+		playersToReset.clear();
 	}
 }
