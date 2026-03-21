@@ -1,7 +1,7 @@
 package dev.munebase.hexkeys.casting.iotas;
 
-import at.petrak.hexcasting.api.spell.iota.Iota;
-import at.petrak.hexcasting.api.spell.iota.IotaType;
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import dev.munebase.hexkeys.registry.HexkeysIotaTypeRegistry;
 import net.minecraft.nbt.NbtCompound;

@@ -38,7 +38,3 @@ publishing {
         // Add repositories to publish to here.
     }
 }
-
-repositories {
-    mavenCentral()
-}

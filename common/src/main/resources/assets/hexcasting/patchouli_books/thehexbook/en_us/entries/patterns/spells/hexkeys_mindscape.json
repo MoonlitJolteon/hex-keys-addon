@@ -2,7 +2,7 @@
   "name": "hexkeys.entry.mindscape",
   "category": "hexcasting:patterns/spells",
   "icon": "minecraft:bookshelf",
-  "sortnum": 0,
+  "sortnum": 500,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [

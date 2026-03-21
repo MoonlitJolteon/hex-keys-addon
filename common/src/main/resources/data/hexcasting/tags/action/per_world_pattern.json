@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "hexkeys:create_library_key",
+    "hexkeys:kleins_chest"
+  ]
+}

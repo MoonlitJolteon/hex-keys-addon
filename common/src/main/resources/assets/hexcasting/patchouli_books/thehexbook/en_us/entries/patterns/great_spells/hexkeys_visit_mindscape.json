@@ -2,7 +2,7 @@
   "name": "hexkeys.entry.visit_mindscape",
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:bookshelf",
-  "sortnum": 0,
+  "sortnum": 500,
   "advancement": "hexkeys:enter_the_mindscape",
   "read_by_default": true,
   "pages": [

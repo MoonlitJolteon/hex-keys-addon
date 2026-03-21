@@ -66,20 +66,15 @@ allprojects {
     group = project.mavenGroup
 
     repositories {
+        mavenCentral()
         maven { url 'https://jitpack.io' }
-        maven {
-            url "https://squiddev.cc/maven/"
-        }
         maven { url "https://maven.terraformersmc.com/" }
         maven { url "https://maven.terraformersmc.com/releases" }
         maven { url "https://maven.shedaniel.me/" }
 
         // Hex Casting Dependencies
+        maven { url "https://maven.hexxy.media" }
         maven { url "https://maven.blamejared.com/" }
-        maven {
-            name "entity reach"
-            url "https://maven.jamieswhiteshirt.com/libs-release/"
-        }
         maven { url "https://mvn.devos.one/snapshots/" }
         maven {
             name = 'Ladysnake Mods'
@@ -91,10 +86,6 @@ allprojects {
         }
         maven {
             url = "https://maven.theillusivec4.top/"
-        }
-        maven {
-            name = 'GeckoLib'
-            url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
         }
         exclusiveContent {
             forRepository {
@@ -171,8 +162,6 @@ ext.getLatestChangelog = {
     }
     return changelog.trim()
 }
-
-ext.bookPath = "data/hexkeys/patchouli_books/hexkeysbook"
 
 tasks.register("viewLatestChangelog") {
     group "documentation"

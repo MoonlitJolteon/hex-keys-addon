@@ -2,7 +2,7 @@
   "name": "hexkeys.entry.klein_storage",
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:barrel",
-  "sortnum": 0,
+  "sortnum": 501,
   "advancement": "hexcasting:enlightenment",
   "read_by_default": true,
   "pages": [

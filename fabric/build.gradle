@@ -43,13 +43,16 @@ dependencies {
 
     modImplementation "at.petra-k.paucal:paucal-fabric-${minecraftVersion}:${paucalVersion}"
     modImplementation "vazkii.patchouli:Patchouli:${minecraftVersion}-${patchouliVersion}-FABRIC"
+    modRuntimeOnly "me.shedaniel.cloth:cloth-config-fabric:${clothConfigVersion}"
+    modRuntimeOnly("com.samsthenerd.inline:inline-fabric:${inlineVersion}") { transitive = false }
+    localRuntime "io.github.llamalad7:mixinextras-fabric:${mixinExtrasVersion}"
+    include "io.github.llamalad7:mixinextras-fabric:${mixinExtrasVersion}"
+    annotationProcessor "io.github.llamalad7:mixinextras-fabric:${mixinExtrasVersion}"
 
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:${cardinalComponentsVersion}"
 
-    modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
-    include "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
-
     modImplementation "dev.emi:trinkets:${trinketsVersion}"
+    modLocalRuntime "io.github.tropheusj:serialization-hooks:${serializationHooksVersion}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
@@ -92,25 +95,6 @@ components.java {
         skip()
     }
 }
-
-// this fixes mod's hex notebook additions missing in dev runtime because of something with how patchouli handles its data
-// the only other thing that could fix it was adding common's resources to srcDirs directly,
-// but that lead to the built jar causing mixin injection crashes in non-dev environments
-// feel free to reach out if you manage to fix this without copying the book data
-tasks.register("clearGeneratedBook", Delete) {
-    description "Clear the book in generated resources."
-
-    delete "src/generated/resources/$bookPath"
-}
-tasks.register("copyBookToGenerated", Copy) {
-    description "Copy the book from resources to generated resources."
-
-    from "../common/src/main/resources/$bookPath"
-    into "src/generated/resources/$bookPath"
-}
-tasks.copyBookToGenerated.dependsOn(tasks.clearGeneratedBook)
-tasks.processResources.dependsOn(tasks.copyBookToGenerated)
-tasks.sourcesJar.dependsOn(tasks.copyBookToGenerated)
 
 publishing {
     publications {

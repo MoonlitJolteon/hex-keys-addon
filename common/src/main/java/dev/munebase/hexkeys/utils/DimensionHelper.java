@@ -3,16 +3,15 @@ package dev.munebase.hexkeys.utils;
 import dev.munebase.hexkeys.Hexkeys;
 import dev.munebase.hexkeys.registry.DimensionRegistry;
 import dev.munebase.hexkeys.worldData.MindscapeStatus;
-import net.minecraft.client.util.math.Vector3d;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 
@@ -33,7 +32,7 @@ public class DimensionHelper
 	{
 		// I think it has to be done this way since the soul dimension is not
 		// shared between players like it is in random things SpectreKey dimension
-		DimensionType type = world.getRegistryManager().get(Registry.DIMENSION_TYPE_KEY).get(dimTypeKey);
+		DimensionType type = world.getRegistryManager().get(RegistryKeys.DIMENSION_TYPE).get(dimTypeKey);
 		return type != null && type.equals(world.getDimension());
 	}
 
@@ -51,7 +50,7 @@ public class DimensionHelper
 		double x = (minimumSpacingBetweenIslands * randX.nextInt(-range, range));
 		double y = FLOOR_LEVEL + 2;
 		double z = (minimumSpacingBetweenIslands * randY.nextInt(-range, range));
-		return new BlockPos(x, y, z);
+		return BlockPos.ofFloored(x, y, z);
 	}
 
 	public static void flipDimension(ServerPlayerEntity player, UUID mindscapeOwnerUUID, MinecraftServer server)
@@ -71,7 +70,7 @@ public class DimensionHelper
 		{
 			RegistryKey<World> destinationKey =
 					RegistryKey.of(
-							Registry.WORLD_KEY,
+							RegistryKeys.WORLD,
 							new Identifier(
 									mindNBT.getString(NBTKeys.LAST_DIMENSION_MOD_ID),
 									mindNBT.getString(NBTKeys.LAST_DIMENSION_MOD_DIMENSION))
@@ -99,7 +98,7 @@ public class DimensionHelper
 		}
 		else
 		{
-			destination = getOrCreateMindscape(mindscapeOwnerUUID, new BlockPos(x, y, z), server);
+			destination = getOrCreateMindscape(mindscapeOwnerUUID, BlockPos.ofFloored(x, y, z), server);
 		}
 
 		Identifier location = player.getEntityWorld().getDimensionKey().getValue();
@@ -120,14 +119,12 @@ public class DimensionHelper
 			player.getAbilities().allowFlying = true; // Allow flight in the mind
 		}
 
-		Vector3d newPosByDestination = new Vector3d(x,y,z);
-
 		TeleportHelper.teleportEntity(
 				player,
 				destination,
-				newPosByDestination.x,
+				x,
 				y,
-				newPosByDestination.z,
+				z,
 				player.getHeadYaw(),
 				player.getPitch()
 		);
