@@ -43,10 +43,10 @@ dependencies {
 
     // // Hex Casting Dependencies
     modCompileOnly "at.petra-k.paucal:paucal-forge-${minecraftVersion}:${paucalVersion}"
-    modCompileOnly "vazkii.patchouli:Patchouli:${minecraftVersion}-${patchouliVersion}"
+    modCompileOnly "vazkii.patchouli:Patchouli:${minecraftVersion}-${patchouliVersion}-FORGE"
 
     modRuntimeOnly "at.petra-k.paucal:paucal-forge-${minecraftVersion}:${paucalVersion}"
-    modRuntimeOnly "vazkii.patchouli:Patchouli:${minecraftVersion}-${patchouliVersion}"
+    modRuntimeOnly "vazkii.patchouli:Patchouli:${minecraftVersion}-${patchouliVersion}-FORGE"
 
     modRuntimeOnly "maven.modrinth:jei:Y1en3Fb4"
 
@@ -138,36 +138,39 @@ publishMods {
     displayName = "Hex Keys $project.version [Forge]"
 
     // Uncomment your desired platform(s)
-    curseforge {
-        accessToken = project.curseforgeApiToken
-        println accessToken.get()
-        projectId = project.curseforgeId
-        minecraftVersions.add(minecraftVersion)
+    if (project.hasProperty("curseforgeApiToken") && project.hasProperty("curseforgeId")) {
+        curseforge {
+            accessToken = project.curseforgeApiToken
+            projectId = project.curseforgeId
+            minecraftVersions.add(minecraftVersion)
 
-        requires {
-            slug = "architectury-api"
-        }
-        requires {
-            slug = "kotlin-for-forge"
-        }
-        requires {
-            slug = "hexcasting"
+            requires {
+                slug = "architectury-api"
+            }
+            requires {
+                slug = "kotlin-for-forge"
+            }
+            requires {
+                slug = "hexcasting"
+            }
         }
     }
 
-    modrinth {
-        accessToken = project.modrinthApiToken
-        projectId = project.modrinthId
-        minecraftVersions.add("1.19.2")
+    if (project.hasProperty("modrinthApiToken") && project.hasProperty("modrinthId")) {
+        modrinth {
+            accessToken = project.modrinthApiToken
+            projectId = project.modrinthId
+            minecraftVersions.add(minecraftVersion)
 
-        requires {
-            slug = "architectury-api"
-        }
-        requires {
-            slug = "kotlin-for-forge"
-        }
-        requires {
-            slug = "hex-casting"
+            requires {
+                slug = "architectury-api"
+            }
+            requires {
+                slug = "kotlin-for-forge"
+            }
+            requires {
+                slug = "hex-casting"
+            }
         }
     }
 }

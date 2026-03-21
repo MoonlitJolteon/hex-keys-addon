@@ -49,9 +49,6 @@ dependencies {
     modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
     include "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
 
-    modImplementation "io.github.tropheusj:serialization-hooks:${serializationHooksVersion}"
-    include "io.github.tropheusj:serialization-hooks:${serializationHooksVersion}"
-
     modImplementation "dev.emi:trinkets:${trinketsVersion}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
@@ -140,41 +137,45 @@ publishMods {
     displayName = "Hex Keys $project.version [Fabric]"
 
     // Uncomment your desired platform(s)
-    curseforge {
-        accessToken = project.curseforgeApiToken
-        projectId = project.curseforgeId
-        minecraftVersions.add(minecraftVersion)
+    if (project.hasProperty("curseforgeApiToken") && project.hasProperty("curseforgeId")) {
+        curseforge {
+            accessToken = project.curseforgeApiToken
+            projectId = project.curseforgeId
+            minecraftVersions.add(minecraftVersion)
 
-        requires{
-            slug = "fabric-api"
-        }
-        requires {
-            slug = "architectury-api"
-        }
-        requires {
-            slug = "fabric-language-kotlin"
-        }
-        requires {
-            slug = "hexcasting"
+            requires{
+                slug = "fabric-api"
+            }
+            requires {
+                slug = "architectury-api"
+            }
+            requires {
+                slug = "fabric-language-kotlin"
+            }
+            requires {
+                slug = "hexcasting"
+            }
         }
     }
 
-    modrinth {
-        accessToken = project.modrinthApiToken
-        projectId = project.modrinthId
-        minecraftVersions.add("1.19.2")
+    if (project.hasProperty("modrinthApiToken") && project.hasProperty("modrinthId")) {
+        modrinth {
+            accessToken = project.modrinthApiToken
+            projectId = project.modrinthId
+            minecraftVersions.add(minecraftVersion)
 
-        requires{
-            slug = "fabric-api"
-        }
-        requires {
-            slug = "architectury-api"
-        }
-        requires {
-            slug = "fabric-language-kotlin"
-        }
-        requires {
-            slug = "hex-casting"
+            requires{
+                slug = "fabric-api"
+            }
+            requires {
+                slug = "architectury-api"
+            }
+            requires {
+                slug = "fabric-language-kotlin"
+            }
+            requires {
+                slug = "hex-casting"
+            }
         }
     }
 }
