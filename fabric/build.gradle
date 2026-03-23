@@ -121,45 +121,40 @@ publishMods {
     displayName = "Hex Keys $project.version [Fabric]"
 
     // Uncomment your desired platform(s)
-    if (project.hasProperty("curseforgeApiToken") && project.hasProperty("curseforgeId")) {
-        curseforge {
-            accessToken = project.curseforgeApiToken
-            projectId = project.curseforgeId
-            minecraftVersions.add(minecraftVersion)
+    curseforge {
+        accessToken = project.curseforgeApiToken
+        projectId = project.curseforgeId
 
-            requires{
-                slug = "fabric-api"
-            }
-            requires {
-                slug = "architectury-api"
-            }
-            requires {
-                slug = "fabric-language-kotlin"
-            }
-            requires {
-                slug = "hexcasting"
-            }
+        requires{
+            slug = "fabric-api"
+        }
+        requires {
+            slug = "architectury-api"
+        }
+        requires {
+            slug = "fabric-language-kotlin"
+        }
+        requires {
+            slug = "hexcasting"
         }
     }
 
-    if (project.hasProperty("modrinthApiToken") && project.hasProperty("modrinthId")) {
-        modrinth {
-            accessToken = project.modrinthApiToken
-            projectId = project.modrinthId
-            minecraftVersions.add(minecraftVersion)
+    modrinth {
+        accessToken = project.modrinthApiToken
+        projectId = project.modrinthId
+        minecraftVersions.add(minecraftVersion)
 
-            requires{
-                slug = "fabric-api"
-            }
-            requires {
-                slug = "architectury-api"
-            }
-            requires {
-                slug = "fabric-language-kotlin"
-            }
-            requires {
-                slug = "hex-casting"
-            }
+        requires{
+            slug = "fabric-api"
+        }
+        requires {
+            slug = "architectury-api"
+        }
+        requires {
+            slug = "fabric-language-kotlin"
+        }
+        requires {
+            slug = "hex-casting"
         }
     }
 }

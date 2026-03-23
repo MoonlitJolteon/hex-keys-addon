@@ -124,39 +124,35 @@ publishMods {
     displayName = "Hex Keys $project.version [Forge]"
 
     // Uncomment your desired platform(s)
-    if (project.hasProperty("curseforgeApiToken") && project.hasProperty("curseforgeId")) {
-        curseforge {
-            accessToken = project.curseforgeApiToken
-            projectId = project.curseforgeId
-            minecraftVersions.add(minecraftVersion)
+    curseforge {
+        accessToken = project.curseforgeApiToken
+        projectId = project.curseforgeId
 
-            requires {
-                slug = "architectury-api"
-            }
-            requires {
-                slug = "kotlin-for-forge"
-            }
-            requires {
-                slug = "hexcasting"
-            }
+        requires {
+            slug = "architectury-api"
+        }
+        requires {
+            slug = "kotlin-for-forge"
+        }
+        requires {
+            slug = "hexcasting"
         }
     }
 
-    if (project.hasProperty("modrinthApiToken") && project.hasProperty("modrinthId")) {
-        modrinth {
-            accessToken = project.modrinthApiToken
-            projectId = project.modrinthId
-            minecraftVersions.add(minecraftVersion)
+    modrinth {
+        accessToken = project.modrinthApiToken
+        projectId = project.modrinthId
+        minecraftVersions.add(minecraftVersion)
 
-            requires {
-                slug = "architectury-api"
-            }
-            requires {
-                slug = "kotlin-for-forge"
-            }
-            requires {
-                slug = "hex-casting"
-            }
+        requires {
+            slug = "architectury-api"
+        }
+        requires {
+            slug = "kotlin-for-forge"
+        }
+        requires {
+            slug = "hex-casting"
         }
     }
+    
 }
