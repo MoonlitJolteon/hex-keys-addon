@@ -56,6 +56,9 @@ dependencies {
     include "io.github.llamalad7:mixinextras-forge:${mixinExtrasVersion}"
 
     runtimeOnly "thedarkcolour:kotlinforforge:$project.forgeKotlinVersion"
+    runtimeOnly 'me.djtheredstoner:DevAuth-forge-latest:1.2.1'
+
+    modImplementation("com.github.MoonlitJolteon.DynamicKeybinds-Library:dynamickeybinds-forge-1.20.1-forge:${dynamicKeybindsVersion}") { transitive = false }
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
