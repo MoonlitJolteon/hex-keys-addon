@@ -1,30 +1,32 @@
 package dev.munebase.hexkeys.fabric;
 
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.common.lib.hex.HexActions;
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import dev.munebase.hexkeys.registry.DimensionRegistry;
-import net.fabricmc.loader.api.FabricLoader;
-import dev.munebase.hexkeys.HexkeysAbstractions;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-
-import java.nio.file.Path;
+import dev.munebase.hexkeys.registry.HexkeysIotaTypeRegistry;
+import dev.munebase.hexkeys.registry.HexkeysPatternRegistry;
+import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
 
 public class HexkeysAbstractionsImpl
 {
-	/**
-	 * This is the actual implementation of {@link HexkeysAbstractions#getConfigDirectory()}.
-	 */
-	public static Path getConfigDirectory()
-	{
-		return FabricLoader.getInstance().getConfigDir();
-	}
-
-	public static void processAddingDim(MinecraftServer server, ServerWorld world)
-	{
-
-	}
-
 	public static void commonSetup() {
 		DimensionRegistry.registerNoiseSettings();
 		DimensionRegistry.registerChunkGenerators();
+	}
+
+	public static void registerHexcastingEntries() {
+		for (var entry : HexkeysPatternRegistry.PATTERNS)
+		{
+			Registry.register(HexActions.REGISTRY, entry.id(), new ActionRegistryEntry(entry.pattern(), entry.action()));
+		}
+
+		for (var entry : HexkeysPatternRegistry.PER_WORLD_PATTERNS)
+		{
+			Registry.register(HexActions.REGISTRY, entry.id(), new ActionRegistryEntry(entry.pattern(), entry.action()));
+		}
+
+		Registry.register(HexIotaTypes.REGISTRY, new Identifier("hexkeys", "mindscape"), HexkeysIotaTypeRegistry.MINDSCAPE);
 	}
 }

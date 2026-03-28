@@ -43,14 +43,22 @@ dependencies {
 
     // // Hex Casting Dependencies
     modCompileOnly "at.petra-k.paucal:paucal-forge-${minecraftVersion}:${paucalVersion}"
-    modCompileOnly "vazkii.patchouli:Patchouli:${minecraftVersion}-${patchouliVersion}"
+    modCompileOnly "vazkii.patchouli:Patchouli:${minecraftVersion}-${patchouliVersion}-FORGE"
 
     modRuntimeOnly "at.petra-k.paucal:paucal-forge-${minecraftVersion}:${paucalVersion}"
-    modRuntimeOnly "vazkii.patchouli:Patchouli:${minecraftVersion}-${patchouliVersion}"
-
-    modRuntimeOnly "maven.modrinth:jei:Y1en3Fb4"
+    modRuntimeOnly "vazkii.patchouli:Patchouli:${minecraftVersion}-${patchouliVersion}-FORGE"
+    modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${clothConfigVersion}"
+    modRuntimeOnly "top.theillusivec4.caelus:caelus-forge:${caelusVersion}"
+    modRuntimeOnly("com.samsthenerd.inline:inline-forge:${inlineVersion}") { transitive = false }
+    compileOnly "io.github.llamalad7:mixinextras-common:${mixinExtrasVersion}"
+    annotationProcessor "io.github.llamalad7:mixinextras-common:${mixinExtrasVersion}"
+    localRuntime "io.github.llamalad7:mixinextras-forge:${mixinExtrasVersion}"
+    include "io.github.llamalad7:mixinextras-forge:${mixinExtrasVersion}"
 
     runtimeOnly "thedarkcolour:kotlinforforge:$project.forgeKotlinVersion"
+    runtimeOnly 'me.djtheredstoner:DevAuth-forge-latest:1.2.1'
+
+    modImplementation("dev.munebase.dynamickeybinds:dynamickeybinds-forge-1.20.1-forge:${dynamicKeybindsVersion}") { transitive = false }
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
@@ -94,25 +102,6 @@ components.java {
     }
 }
 
-// this fixes mod's hex notebook additions missing in dev runtime because of something with how patchouli handles its data
-// the only other thing that could fix it was adding common's resources to srcDirs directly,
-// but that lead to the built jar causing mixin injection crashes in non-dev environments
-// feel free to reach out if you manage to fix this without copying the book data
-tasks.register("clearGeneratedBook", Delete) {
-    description "Clear the book in generated resources."
-
-    delete "src/generated/resources/$bookPath"
-}
-tasks.register("copyBookToGenerated", Copy) {
-    description "Copy the book from resources to generated resources."
-
-    from "../common/src/main/resources/$bookPath"
-    into "src/generated/resources/$bookPath"
-}
-tasks.copyBookToGenerated.dependsOn(tasks.clearGeneratedBook)
-tasks.processResources.dependsOn(tasks.copyBookToGenerated)
-tasks.sourcesJar.dependsOn(tasks.copyBookToGenerated)
-
 publishing {
     publications {
         mavenForge(MavenPublication) {
@@ -140,9 +129,7 @@ publishMods {
     // Uncomment your desired platform(s)
     curseforge {
         accessToken = project.curseforgeApiToken
-        println accessToken.get()
         projectId = project.curseforgeId
-        minecraftVersions.add(minecraftVersion)
 
         requires {
             slug = "architectury-api"
@@ -158,7 +145,7 @@ publishMods {
     modrinth {
         accessToken = project.modrinthApiToken
         projectId = project.modrinthId
-        minecraftVersions.add("1.19.2")
+        minecraftVersions.add(minecraftVersion)
 
         requires {
             slug = "architectury-api"
@@ -170,4 +157,5 @@ publishMods {
             slug = "hex-casting"
         }
     }
+    
 }

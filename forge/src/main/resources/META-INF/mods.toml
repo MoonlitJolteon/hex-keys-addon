@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[47,)"
 #issueTrackerURL = ""
 license = "MIT"
 
@@ -23,20 +23,20 @@ side = "BOTH"
 [[dependencies.hexkeys]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.2,)"
+versionRange = "[1.20.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexkeys]]
 modId = "architectury"
 mandatory = true
-versionRange = "[6.5.85,)"
+versionRange = "[9.2.14,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexkeys]]
 modId = "hexcasting"
 mandatory = true
-versionRange = "[0.10.3,)"
+versionRange = "[0.11.3,)"
 ordering = "NONE"
 side = "BOTH"

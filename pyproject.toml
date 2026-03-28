@@ -19,7 +19,7 @@ requires-python = ">=3.11"
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [project.urls]
-Homepage = "https://moonlitjolteon.github.io/hex-keys-addon"
+Homepage = "https://hexkeys.munebase.dev"
 Source = "https://github.com/MoonlitJolteon/hex-keys-addon"
 
 # Gradle version/deps

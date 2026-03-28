@@ -1,11 +1,10 @@
 package dev.munebase.hexkeys;
 
 import dev.munebase.hexkeys.blocks.HexkeysBlocks;
-import dev.munebase.hexkeys.casting.HexKeysDiscoverers;
+import dev.munebase.hexkeys.blocks.HexkeysBlockEntities;
 import dev.munebase.hexkeys.items.HexkeysItems;
 import dev.munebase.hexkeys.registry.DimensionRegistry;
 import dev.munebase.hexkeys.registry.HexkeysIotaTypeRegistry;
-import dev.munebase.hexkeys.registry.HexkeysItemRegistry;
 import dev.munebase.hexkeys.registry.HexkeysPatternRegistry;
 import dev.munebase.hexkeys.utils.ResourceLocHelper;
 import net.minecraft.util.Identifier;
@@ -25,13 +24,13 @@ public class Hexkeys {
     public static void init() {
         LOGGER.info("Hex Keys says hello!");
 
-        HexKeysDiscoverers.init();
-        HexkeysItemRegistry.init();
         HexkeysIotaTypeRegistry.init();
         HexkeysPatternRegistry.init();
+        HexkeysAbstractions.registerHexcastingEntries();
         HexkeysAbstractions.commonSetup();
 
         HexkeysBlocks.register();
+        HexkeysBlockEntities.register();
         HexkeysItems.register();
 
         DimensionRegistry.registerDimensions();

@@ -4,8 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.network.packet.c2s.play.UpdateDifficultyC2SPacket;
-import net.minecraft.network.packet.c2s.play.UpdatePlayerAbilitiesC2SPacket;
 import net.minecraft.network.packet.s2c.play.DifficultyS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityStatusEffectS2CPacket;
 import net.minecraft.network.packet.s2c.play.ExperienceBarUpdateS2CPacket;
@@ -22,7 +20,7 @@ public class TeleportHelper
 {
 	public static void teleportEntity(Entity entity, ServerWorld destinationDimension, double x, double y, double z, float yRot, float xRot)
 	{
-		if (entity == null || entity.world.isClient() || !entity.canUsePortals())
+		if (entity == null || entity.getWorld().isClient() || !entity.canUsePortals())
 		{
 			return;
 		}
@@ -50,7 +48,7 @@ public class TeleportHelper
 		//This section is mostly copied and then modified from TeleportCommand.performTeleport()
 		if (entityIsPlayer)
 		{
-			ChunkPos chunkPos = new ChunkPos(new BlockPos(x, y, z));
+			ChunkPos chunkPos = new ChunkPos(BlockPos.ofFloored(x, y, z));
 			destinationDimension.getChunkManager().addTicket(ChunkTicketType.POST_TELEPORT, chunkPos, 1, entity.getId());
 			entity.stopRiding();
 			if (serverPlayerEntity.isSleeping())
@@ -75,7 +73,7 @@ public class TeleportHelper
 				serverPlayerEntity.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(serverPlayerEntity.getId(), effectinstance));
 			}
 
-			WorldProperties worldInfo = serverPlayerEntity.world.getLevelProperties();
+			WorldProperties worldInfo = serverPlayerEntity.getWorld().getLevelProperties();
 			//I'd always wondered what the deal was with xp not showing properly.
 			serverPlayerEntity.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(serverPlayerEntity.getAbilities()));
 			serverPlayerEntity.networkHandler.sendPacket(new DifficultyS2CPacket(worldInfo.getDifficulty(), worldInfo.isDifficultyLocked()));

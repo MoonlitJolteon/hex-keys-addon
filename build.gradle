@@ -1,9 +1,9 @@
 plugins {
     id "architectury-plugin" version "3.4.+"
 
-    id "dev.architectury.loom" version "1.4.+" apply false
+    id "dev.architectury.loom" version "1.7.+" apply false
 
-    id "org.jetbrains.kotlin.jvm" version "1.8.0" apply false
+    id "org.jetbrains.kotlin.jvm" version "1.9.22" apply false
 
     // for template.env api keys
     id "co.uzzu.dotenv.gradle" version "2.0.0"
@@ -43,7 +43,7 @@ subprojects {
     dependencies {
         minecraft "com.mojang:minecraft:${project.minecraftVersion}"
 
-        mappings "net.fabricmc:yarn:1.19.2+build.28:v2"
+        mappings "net.fabricmc:yarn:${project.yarnMappingsVersion}"
         // Or feel free to use any other mappings you prefer
 
         annotationProcessor "org.ow2.asm:asm:${project.asmVersion}"
@@ -66,20 +66,16 @@ allprojects {
     group = project.mavenGroup
 
     repositories {
+        mavenLocal()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
-        maven {
-            url "https://squiddev.cc/maven/"
-        }
         maven { url "https://maven.terraformersmc.com/" }
         maven { url "https://maven.terraformersmc.com/releases" }
         maven { url "https://maven.shedaniel.me/" }
 
         // Hex Casting Dependencies
+        maven { url "https://maven.hexxy.media" }
         maven { url "https://maven.blamejared.com/" }
-        maven {
-            name "entity reach"
-            url "https://maven.jamieswhiteshirt.com/libs-release/"
-        }
         maven { url "https://mvn.devos.one/snapshots/" }
         maven {
             name = 'Ladysnake Mods'
@@ -91,10 +87,6 @@ allprojects {
         }
         maven {
             url = "https://maven.theillusivec4.top/"
-        }
-        maven {
-            name = 'GeckoLib'
-            url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
         }
         exclusiveContent {
             forRepository {
@@ -117,6 +109,8 @@ allprojects {
                 includeGroup "curse.maven"
             }
         }
+
+        maven { url = 'https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1' }
         // Add any other repositories with your cross-platform dependency mods
     }
 
@@ -159,20 +153,48 @@ allprojects {
 ext.getArtifactId = { platform -> return "$modID-$platform-$minecraftVersion" }
 
 ext.getLatestChangelog = {
-    Collection<String> lines = file("$rootDir/CHANGELOG.md").readLines()
-    String changelog = ""
-    Boolean atSegment = false
-    for (String line : lines) {
-        if (line.startsWith("## ")) {
-            if (atSegment) break // hit next segment
-            atSegment = true
-        }
-        if (atSegment) changelog += "$line\n"
-    }
-    return changelog.trim()
-}
+    String changelogOverride = (project.findProperty("changelog") ?: "").toString().trim()
+    File changelogFile = file("$rootDir/CHANGELOG.md")
 
-ext.bookPath = "data/hexkeys/patchouli_books/hexkeysbook"
+    if (changelogOverride.equalsIgnoreCase("No changelog provided.")) {
+        changelogOverride = ""
+    }
+
+    String changelogText = changelogOverride
+    if (changelogText.isBlank() && changelogFile.exists()) {
+        String changelogContents = changelogFile.getText("UTF-8")
+        String versionString = project.version.toString()
+
+        def versionHeaderPattern = ~/(?m)^## \[\Q${versionString}\E\] - .*$/
+        def versionHeaderMatcher = versionHeaderPattern.matcher(changelogContents)
+
+        if (versionHeaderMatcher.find()) {
+            int entryStart = versionHeaderMatcher.start()
+            int nextEntryStart = changelogContents.indexOf("\n## [", versionHeaderMatcher.end())
+            changelogText = (nextEntryStart >= 0
+                ? changelogContents.substring(entryStart, nextEntryStart)
+                : changelogContents.substring(entryStart)
+            ).trim()
+        } else {
+            def firstEntryMatcher = ~/(?m)^## \[.+?\] - .*$/
+            firstEntryMatcher = firstEntryMatcher.matcher(changelogContents)
+            if (firstEntryMatcher.find()) {
+                int entryStart = firstEntryMatcher.start()
+                int nextEntryStart = changelogContents.indexOf("\n## [", firstEntryMatcher.end())
+                changelogText = (nextEntryStart >= 0
+                    ? changelogContents.substring(entryStart, nextEntryStart)
+                    : changelogContents.substring(entryStart)
+                ).trim()
+            }
+        }
+    }
+
+    if (changelogText.isBlank()) {
+        changelogText = "No changelog provided."
+    }
+
+    return changelogText
+}
 
 tasks.register("viewLatestChangelog") {
     group "documentation"

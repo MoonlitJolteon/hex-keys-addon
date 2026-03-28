@@ -1,0 +1,6 @@
+{
+  "parent": "hexkeys:block/noetic_bookshelf",
+  "textures": {
+    "overlay": "hexkeys:block/noetic_bookshelf_overlay_2"
+  }
+}

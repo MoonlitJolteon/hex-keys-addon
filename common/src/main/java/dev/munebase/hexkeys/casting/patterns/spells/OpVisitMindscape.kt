@@ -1,11 +1,11 @@
 package dev.munebase.hexkeys.casting.patterns.spells
 
 import at.petrak.hexcasting.api.misc.MediaConstants
-import at.petrak.hexcasting.api.spell.ParticleSpray
-import at.petrak.hexcasting.api.spell.RenderedSpell
-import at.petrak.hexcasting.api.spell.SpellAction
-import at.petrak.hexcasting.api.spell.casting.CastingContext
-import at.petrak.hexcasting.api.spell.iota.Iota
+import at.petrak.hexcasting.api.casting.ParticleSpray
+import at.petrak.hexcasting.api.casting.RenderedSpell
+import at.petrak.hexcasting.api.casting.castables.SpellAction
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.iota.Iota
 import dev.munebase.hexkeys.Hexkeys
 import dev.munebase.hexkeys.casting.iotas.MindscapeIota
 import dev.munebase.hexkeys.casting.patterns.mishaps.MishapMindscapeDoesntExist
@@ -21,36 +21,39 @@ class OpVisitMindscape : SpellAction {
     override val argc = 1
     val cost = MediaConstants.CRYSTAL_UNIT
 
-    override fun execute(args: List<Iota>, ctx: CastingContext): Triple<RenderedSpell, Int, List<ParticleSpray>>? {
-        val player: ServerPlayerEntity = ctx.caster
-        val mindscapeOwner = args[0];
-        val mindscapeList = MindscapeStatus.getServerState(ctx.world.server)
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+        val player = env.castingEntity as? ServerPlayerEntity ?: return SpellAction.Result(Spell(null, null), 0L, listOf())
+        val mindscapeOwner = args[0]
+        val mindscapeList = MindscapeStatus.getServerState(env.world.server)
         val tag: NbtCompound = PlayerHelper.getPersistentTag(player, Hexkeys.IDENTIFIER.toString())
         if(mindscapeOwner.type != MindscapeIota.TYPE) {
             throw MishapNotAMindscapeKey()
         }
-        if (mindscapeList.hasMindscape((mindscapeOwner as MindscapeIota).player.uuid)) {
-            tag.putString("CURRENT_MINDSCAPE_OWNER_UUID", mindscapeOwner.player.uuidAsString)
+        val owner = mindscapeOwner as MindscapeIota
+        if (mindscapeList.hasMindscape(owner.player.uuid)) {
+            tag.putString("CURRENT_MINDSCAPE_OWNER_UUID", owner.player.uuidAsString)
         }
         else {
             throw MishapMindscapeDoesntExist()
         }
 
-        return Triple(
-            Spell(player, mindscapeOwner),
+        return SpellAction.Result(
+            Spell(player, owner),
             cost,
-            listOf(ParticleSpray.burst(ctx.caster.pos, 1.0))
+            listOf(ParticleSpray.burst(player.pos, 1.0))
         )
     }
 
-    private data class Spell(val player: ServerPlayerEntity, val mindscapeOwner: MindscapeIota) : RenderedSpell {
-        override fun cast(ctx: CastingContext) {
-            if(DimensionHelper.isInMindscape(player)) {
-                var mindNBT = PlayerHelper.getPersistentTag(player, Hexkeys.IDENTIFIER.toString())
-                var mindscapePos = DimensionHelper.getMindscapePos(mindscapeOwner.player.uuid, mindNBT.getInt(NBTKeys.MINDSCAPE_VERSION_NUM))
-                player.teleport(mindscapePos.x + 0.5, mindscapePos.y + 0.5, mindscapePos.z + 0.5)
+    private data class Spell(val player: ServerPlayerEntity?, val mindscapeOwner: MindscapeIota?) : RenderedSpell {
+        override fun cast(env: CastingEnvironment) {
+            val castPlayer = player ?: return
+            val owner = mindscapeOwner ?: return
+            if(DimensionHelper.isInMindscape(castPlayer)) {
+                val mindNBT = PlayerHelper.getPersistentTag(castPlayer, Hexkeys.IDENTIFIER.toString())
+                val mindscapePos = DimensionHelper.getMindscapePos(owner.player.uuid, mindNBT.getInt(NBTKeys.MINDSCAPE_VERSION_NUM))
+                castPlayer.teleport(mindscapePos.x + 0.5, mindscapePos.y + 0.5, mindscapePos.z + 0.5)
             } else {
-                DimensionHelper.flipDimension(player, mindscapeOwner.player.uuid, player.server)
+                DimensionHelper.flipDimension(castPlayer, owner.player.uuid, castPlayer.server)
             }
         }
 
