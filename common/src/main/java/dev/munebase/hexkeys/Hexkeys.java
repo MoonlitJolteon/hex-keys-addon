@@ -1,6 +1,7 @@
 package dev.munebase.hexkeys;
 
 import dev.munebase.hexkeys.blocks.HexkeysBlocks;
+import dev.munebase.hexkeys.blocks.HexkeysBlockEntities;
 import dev.munebase.hexkeys.items.HexkeysItems;
 import dev.munebase.hexkeys.registry.DimensionRegistry;
 import dev.munebase.hexkeys.registry.HexkeysIotaTypeRegistry;
@@ -29,6 +30,7 @@ public class Hexkeys {
         HexkeysAbstractions.commonSetup();
 
         HexkeysBlocks.register();
+        HexkeysBlockEntities.register();
         HexkeysItems.register();
 
         DimensionRegistry.registerDimensions();

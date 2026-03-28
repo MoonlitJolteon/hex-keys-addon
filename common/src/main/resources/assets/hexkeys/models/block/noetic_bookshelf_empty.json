@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "hexkeys:block/noetic_bookshelf",
+    "side": "hexkeys:block/noetic_bookshelf_horiz",
+    "top": "hexkeys:block/noetic_bookshelf_vert"
+  }
+}

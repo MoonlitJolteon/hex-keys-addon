@@ -66,6 +66,7 @@ allprojects {
     group = project.mavenGroup
 
     repositories {
+        mavenLocal()
         mavenCentral()
         maven { url 'https://jitpack.io' }
         maven { url "https://maven.terraformersmc.com/" }
@@ -152,17 +153,47 @@ allprojects {
 ext.getArtifactId = { platform -> return "$modID-$platform-$minecraftVersion" }
 
 ext.getLatestChangelog = {
-    Collection<String> lines = file("$rootDir/CHANGELOG.md").readLines()
-    String changelog = ""
-    Boolean atSegment = false
-    for (String line : lines) {
-        if (line.startsWith("## ")) {
-            if (atSegment) break // hit next segment
-            atSegment = true
-        }
-        if (atSegment) changelog += "$line\n"
+    String changelogOverride = (project.findProperty("changelog") ?: "").toString().trim()
+    File changelogFile = file("$rootDir/CHANGELOG.md")
+
+    if (changelogOverride.equalsIgnoreCase("No changelog provided.")) {
+        changelogOverride = ""
     }
-    return changelog.trim()
+
+    String changelogText = changelogOverride
+    if (changelogText.isBlank() && changelogFile.exists()) {
+        String changelogContents = changelogFile.getText("UTF-8")
+        String versionString = project.version.toString()
+
+        def versionHeaderPattern = ~/(?m)^## \[\Q${versionString}\E\] - .*$/
+        def versionHeaderMatcher = versionHeaderPattern.matcher(changelogContents)
+
+        if (versionHeaderMatcher.find()) {
+            int entryStart = versionHeaderMatcher.start()
+            int nextEntryStart = changelogContents.indexOf("\n## [", versionHeaderMatcher.end())
+            changelogText = (nextEntryStart >= 0
+                ? changelogContents.substring(entryStart, nextEntryStart)
+                : changelogContents.substring(entryStart)
+            ).trim()
+        } else {
+            def firstEntryMatcher = ~/(?m)^## \[.+?\] - .*$/
+            firstEntryMatcher = firstEntryMatcher.matcher(changelogContents)
+            if (firstEntryMatcher.find()) {
+                int entryStart = firstEntryMatcher.start()
+                int nextEntryStart = changelogContents.indexOf("\n## [", firstEntryMatcher.end())
+                changelogText = (nextEntryStart >= 0
+                    ? changelogContents.substring(entryStart, nextEntryStart)
+                    : changelogContents.substring(entryStart)
+                ).trim()
+            }
+        }
+    }
+
+    if (changelogText.isBlank()) {
+        changelogText = "No changelog provided."
+    }
+
+    return changelogText
 }
 
 tasks.register("viewLatestChangelog") {
