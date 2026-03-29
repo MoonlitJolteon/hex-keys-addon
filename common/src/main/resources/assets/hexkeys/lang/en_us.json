@@ -5,10 +5,18 @@
   "category.hexkeys.noetic_bookshelf": "Hex Keys - Noetic Keybinds",
   "hexcasting.action.hexkeys:library": "Library Key",
   "hexcasting.action.hexkeys:visit_library": "Visitor's Key",
+  "hexcasting.action.hexkeys:read_noetic_bookshelf": "Noetic Read",
+  "hexcasting.action.hexkeys:write_noetic_bookshelf": "Noetic Write",
+  "hexcasting.action.hexkeys:append_noetic_bookshelf": "Noetic Append",
+  "hexcasting.action.hexkeys:erase_noetic_bookshelf": "Noetic Erase",
   "hexcasting.action.hexkeys:create_library_key": "Morpheus's Reflection",
   "hexcasting.action.hexkeys:kleins_chest": "Klein's Chest",
   "hexcasting.spell.hexkeys:library": "Library Key",
   "hexcasting.spell.hexkeys:visit_library": "Visitor's Key",
+  "hexcasting.spell.hexkeys:read_noetic_bookshelf": "Noetic Read",
+  "hexcasting.spell.hexkeys:write_noetic_bookshelf": "Noetic Write",
+  "hexcasting.spell.hexkeys:append_noetic_bookshelf": "Noetic Append",
+  "hexcasting.spell.hexkeys:erase_noetic_bookshelf": "Noetic Erase",
   "hexcasting.spell.hexkeys:create_library_key": "Morpheus's Reflection",
   "hexcasting.spell.hexkeys:kleins_chest": "Klein's Chest",
   "hexkeys.entry.klein_storage": "Klein Storage",
@@ -30,6 +38,10 @@
   "advancements.enter_the_mindscape.title": "It's so empty...",
   "advancements.enter_the_mindscape.description": "You can't believe how empty your mind is... perhaps you could fill it?",
   "hexcasting.mishap.not_a_mindscape_key": "Visitor's Key expected a reference to someone's Library!",
-  "hexcasting.mishap.mindscape_doesnt_exist": "The Library you are trying to visit doesn't exist!"
+  "hexcasting.mishap.mindscape_doesnt_exist": "The Library you are trying to visit doesn't exist!",
+  "hexcasting.mishap.noetic_bookshelf_expected": "Expected a Noetic Bookshelf.",
+  "hexcasting.mishap.noetic_or_akashic_bookshelf_expected": "Expected a Noetic or Akashic Bookshelf.",
+  "hexcasting.mishap.noetic_bookshelf_empty": "Noetic Bookshelf is empty. Write a list before appending.",
+  "hexcasting.mishap.bookshelf_not_empty": "Bookshelf bust be empty to perform this action."
 
 }

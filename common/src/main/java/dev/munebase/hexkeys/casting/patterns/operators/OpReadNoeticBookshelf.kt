@@ -1,0 +1,27 @@
+package dev.munebase.hexkeys.casting.patterns.operators
+
+import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.NullIota
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.casting.getBlockPos
+import dev.munebase.hexkeys.blocks.BlockEntityNoeticBookshelf
+import dev.munebase.hexkeys.casting.patterns.mishaps.MishapNoeticBookshelfExpected
+
+object OpReadNoeticBookshelf : ConstMediaAction {
+    override val argc = 1
+    override val mediaCost = MediaConstants.DUST_UNIT / 4
+
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+        val pos = args.getBlockPos(0, argc)
+
+        env.assertPosInRange(pos)
+
+        val shelf = env.world.getBlockEntity(pos) as? BlockEntityNoeticBookshelf
+            ?: throw MishapNoeticBookshelfExpected(pos)
+
+        val iota = shelf.getStoredIota(env.world)
+        return listOf(iota ?: NullIota())
+    }
+}
