@@ -58,7 +58,9 @@ dependencies {
     runtimeOnly "thedarkcolour:kotlinforforge:$project.forgeKotlinVersion"
     runtimeOnly 'me.djtheredstoner:DevAuth-forge-latest:1.2.1'
 
-    modImplementation("dev.munebase.dynamickeybinds:dynamickeybinds-forge-1.20.1-forge:${dynamicKeybindsVersion}") { transitive = false }
+    modImplementation("maven.modrinth:dynamickeybinds:${dynamicKeybindsVersion}-forge") { transitive = false }
+    // mavenLocal for local development alongside dynamickeybinds:
+    // modImplementation("dev.munebase.dynamickeybinds:dynamickeybinds-forge-1.20.1-forge:${dynamicKeybindsVersion}") { transitive = false }
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
