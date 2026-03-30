@@ -10,40 +10,61 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
+import dev.munebase.hexkeys.casting.iotas.NoeticBookshelfIota
 import dev.munebase.hexkeys.blocks.BlockNoeticBookshelf
 import dev.munebase.hexkeys.blocks.BlockEntityNoeticBookshelf
 import dev.munebase.hexkeys.blocks.HexkeysBlocks
 import dev.munebase.hexkeys.casting.patterns.mishaps.MishapBookshelfNotEmpty
 import dev.munebase.hexkeys.casting.patterns.mishaps.MishapNoeticCompatibleBookshelfExpected
+import dev.munebase.hexkeys.casting.patterns.mishaps.MishapNoeticWriteMindscapeExpected
+import dev.munebase.hexkeys.registry.DimensionRegistry
+import dev.munebase.hexkeys.utils.DimensionHelper
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
 object OpWriteNoeticBookshelf : SpellAction {
     override val argc = 2
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
-        val pos = args.getBlockPos(0, argc)
         val value = ListIota(args.getList(1, argc))
+        val targetArg = args[0]
+        var targetDimension = env.world.registryKey.value
+        var targetPos: BlockPos
 
-        env.assertPosInRange(pos)
+        if (targetArg is NoeticBookshelfIota) {
+            val target = NoeticBookshelfTargetResolver.resolve(args, 0, argc, env)
+            assertTargetInMindscape(target.world, target.pos)
+            targetDimension = target.world.registryKey.value
+            targetPos = target.pos
+            if (target.shelf.hasStoredIota()) {
+                throw MishapBookshelfNotEmpty(target.pos)
+            }
+        } else {
+            val pos = args.getBlockPos(0, argc)
+            targetPos = pos
+            env.assertPosInRange(pos)
+            assertTargetInMindscape(env.world, pos)
 
-        val blockState = env.world.getBlockState(pos)
-        val blockEntity = env.world.getBlockEntity(pos)
-        when {
-            blockEntity is BlockEntityNoeticBookshelf -> {
-                if (blockEntity.hasStoredIota()) {
-                    throw MishapBookshelfNotEmpty(pos)
+            val blockState = env.world.getBlockState(pos)
+            val blockEntity = env.world.getBlockEntity(pos)
+            when {
+                blockEntity is BlockEntityNoeticBookshelf -> {
+                    if (blockEntity.hasStoredIota()) {
+                        throw MishapBookshelfNotEmpty(pos)
+                    }
                 }
-            }
-            blockState.block is BlockAkashicBookshelf -> {
-                val akashicShelf = blockEntity as? BlockEntityAkashicBookshelf
-                    ?: throw MishapNoeticCompatibleBookshelfExpected(pos)
-                if (!isAkashicShelfEmpty(blockState, akashicShelf)) {
-                    throw MishapBookshelfNotEmpty(pos)
+                blockState.block is BlockAkashicBookshelf -> {
+                    val akashicShelf = blockEntity as? BlockEntityAkashicBookshelf
+                        ?: throw MishapNoeticCompatibleBookshelfExpected(pos)
+                    if (!isAkashicShelfEmpty(blockState, akashicShelf)) {
+                        throw MishapBookshelfNotEmpty(pos)
+                    }
                 }
+                else -> throw MishapNoeticCompatibleBookshelfExpected(pos)
             }
-            else -> throw MishapNoeticCompatibleBookshelfExpected(pos)
         }
 
         val casterPlayer = env.castingEntity as? ServerPlayerEntity
@@ -55,15 +76,23 @@ object OpWriteNoeticBookshelf : SpellAction {
         val totalElements = NoeticBookshelfCostUtils.countTotalElements(value)
         val cost = NoeticBookshelfCostUtils.BASE_WRITE_COST +
             (totalElements * NoeticBookshelfCostUtils.WRITE_COST_PER_ELEMENT)
-        return SpellAction.Result(Spell(pos, value), cost, listOf())
+        return SpellAction.Result(Spell(targetDimension, targetPos, value), cost, listOf())
+    }
+
+    private fun assertTargetInMindscape(world: ServerWorld, pos: BlockPos) {
+        val isMindscape = DimensionHelper.isDimensionOfType(world, DimensionRegistry.DimensionTypes.MINDSCAPE_DIM_TYPE)
+        if (!isMindscape) {
+            throw MishapNoeticWriteMindscapeExpected(pos)
+        }
     }
 
     private data class Spell(
+        val dimension: Identifier,
         val pos: BlockPos,
         val value: Iota
     ) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            val world = env.world
+            val world = NoeticBookshelfTargetResolver.resolveWorld(env.world, dimension) ?: return
             var shelf = world.getBlockEntity(pos) as? BlockEntityNoeticBookshelf
             if (shelf == null) {
                 val state = world.getBlockState(pos)

@@ -1,0 +1,54 @@
+{
+  "name": "hexkeys.entry.noetic_bookshelves",
+  "category": "hexcasting:patterns/great_spells",
+  "icon": "hexkeys:noetic_bookshelf",
+  "sortnum": 502,
+  "advancement": "hexkeys:enter_the_mindscape",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexkeys.page.noetic_bookshelves.1"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexkeys:write_noetic_bookshelf",
+      "anchor": "hexkeys:write_noetic_bookshelf",
+      "input": "vec|Noetic Bookshelf, List",
+      "output": "",
+      "text": "hexkeys.page.noetic_bookshelves.write"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexkeys:get_noetic_bookshelf_ref",
+      "anchor": "hexkeys:get_noetic_bookshelf_ref",
+      "input": "vec",
+      "output": "Noetic Bookshelf",
+      "text": "hexkeys.page.noetic_bookshelves.ref"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexkeys:read_noetic_bookshelf",
+      "anchor": "hexkeys:read_noetic_bookshelf",
+      "input": "vec|Noetic Bookshelf",
+      "output": "Any",
+      "text": "hexkeys.page.noetic_bookshelves.read"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexkeys:append_noetic_bookshelf",
+      "anchor": "hexkeys:append_noetic_bookshelf",
+      "input": "vec|Noetic Bookshelf, Any",
+      "output": "",
+      "text": "hexkeys.page.noetic_bookshelves.append"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexkeys:erase_noetic_bookshelf",
+      "anchor": "hexkeys:erase_noetic_bookshelf",
+      "input": "vec|Noetic Bookshelf",
+      "output": "",
+      "text": "hexkeys.page.noetic_bookshelves.erase"
+    }
+  ]
+}

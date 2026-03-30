@@ -34,8 +34,10 @@ public class HexkeysAbstractionsImpl {
             }
         });
 
-        event.register(HexRegistries.IOTA_TYPE, helper ->
-            helper.register(new Identifier("hexkeys", "mindscape"), HexkeysIotaTypeRegistry.MINDSCAPE));
+        event.register(HexRegistries.IOTA_TYPE, helper -> {
+            helper.register(new Identifier("hexkeys", "mindscape"), HexkeysIotaTypeRegistry.MINDSCAPE);
+            helper.register(new Identifier("hexkeys", "noetic_bookshelf"), HexkeysIotaTypeRegistry.NOETIC_BOOKSHELF);
+        });
     }
 
     private static void extraForForge(FMLCommonSetupEvent event) {

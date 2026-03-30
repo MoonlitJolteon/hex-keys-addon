@@ -24,6 +24,7 @@ import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -85,6 +86,14 @@ public class BlockNoeticBookshelf extends Block implements BlockEntityProvider
 		return state.get(HAS_BOOKS) ? 15 : 0;
 	}
 
+	@Override
+	public float calcBlockBreakingDelta(BlockState state, PlayerEntity player, BlockView world, BlockPos pos) {
+		if (isLocked(world, pos)) {
+			return 0.0F;
+		}
+		return super.calcBlockBreakingDelta(state, player, world, pos);
+	}
+
 
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
@@ -125,6 +134,9 @@ public class BlockNoeticBookshelf extends Block implements BlockEntityProvider
 
 	@Override
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		if (isLocked(world, pos)) {
+			return;
+		}
 		unregisterNoeticKeybind(world, pos);
 		super.onBreak(world, pos, state, player);
 	}
@@ -198,5 +210,13 @@ public class BlockNoeticBookshelf extends Block implements BlockEntityProvider
 		data.putInt("Y", pos.getY());
 		data.putInt("Z", pos.getZ());
 		return Optional.of(new DynamicKeybindAction(NOETIC_KEYBIND_ACTION_ID, data));
+	}
+
+	private static boolean isLocked(BlockView world, BlockPos pos) {
+		BlockEntity be = world.getBlockEntity(pos);
+		if (be instanceof BlockEntityNoeticBookshelf shelf) {
+			return shelf.hasStoredIota();
+		}
+		return false;
 	}
 }

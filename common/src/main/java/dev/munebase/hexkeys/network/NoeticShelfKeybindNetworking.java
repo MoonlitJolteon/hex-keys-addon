@@ -1,5 +1,9 @@
 package dev.munebase.hexkeys.network;
 
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.ListIota;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import dev.architectury.networking.NetworkManager;
 import dev.munebase.hexkeys.Hexkeys;
 import dev.munebase.hexkeys.blocks.BlockEntityNoeticBookshelf;
@@ -10,8 +14,12 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class NoeticShelfKeybindNetworking {
     public static final Identifier USE_NOETIC_SHELF = Hexkeys.id("use_noetic_shelf");
@@ -72,22 +80,46 @@ public final class NoeticShelfKeybindNetworking {
             return;
         }
 
-        String shelfKeyId = shelf.getKeybindId();
-        String displayCode = shelf.getDisplayCode();
         boolean hasStoredIota = shelf.hasStoredIota();
-        String msg = String.format(
-            "Noetic Bookshelf in %s @ %s — keyId=%s, code=%s, hasStoredIota=%s",
-            dimensionId,
-            pos.toShortString(),
-            shelfKeyId == null ? "<none>" : shelfKeyId,
-            displayCode == null ? "<none>" : displayCode,
-            hasStoredIota ? "yes" : "no"
-        );
+        
+        // Debugging the keybind, leaving this in (but commented) just in case
+        // String shelfKeyId = shelf.getKeybindId();
+        // String displayCode = shelf.getDisplayCode();
+        // String msg = String.format(
+        //     "Noetic Bookshelf in %s @ %s — keyId=%s, code=%s, hasStoredIota=%s",
+        //     dimensionId,
+        //     pos.toShortString(),
+        //     shelfKeyId == null ? "<none>" : shelfKeyId,
+        //     displayCode == null ? "<none>" : displayCode,
+        //     hasStoredIota ? "yes" : "no"
+        // );
 
-        if (keybindId != null && !keybindId.isBlank() && shelfKeyId != null && !shelfKeyId.isBlank() && !keybindId.equals(shelfKeyId)) {
-            msg += " [warning: keybind id mismatch]";
+        // if (keybindId != null && !keybindId.isBlank() && shelfKeyId != null && !shelfKeyId.isBlank() && !keybindId.equals(shelfKeyId)) {
+        //     msg += " [warning: keybind id mismatch]";
+        // }
+
+        // player.sendMessage(Text.literal(msg), false);
+
+        if (hasStoredIota) {
+            try {
+                Iota storedIota = shelf.getStoredIota(shelfWorld);
+                if (storedIota instanceof ListIota listIota) {
+                    CastingVM playerVM = IXplatAbstractions.INSTANCE.getStaffcastVM(player, Hand.MAIN_HAND);
+                    if (playerVM != null) {
+                        List<Iota> iotas = new ArrayList<>();
+                        for (Iota iota : listIota.getList()) {
+                            iotas.add(iota);
+                        }
+                        playerVM.queueExecuteAndWrapIotas(iotas, shelfWorld);
+                        IXplatAbstractions.INSTANCE.setStaffcastImage(player, playerVM.getImage());
+                    } else {
+                        player.sendMessage(Text.literal("Noetic Bookshelf: no casting context available"), false);
+                    }
+                }
+            } catch (Exception e) {
+                player.sendMessage(Text.literal("Noetic Bookshelf: error executing stored spell - " + e.getMessage()), false);
+                Hexkeys.LOGGER.error("Failed to execute bookshelf spell", e);
+            }
         }
-
-        player.sendMessage(Text.literal(msg), false);
     }
 }
