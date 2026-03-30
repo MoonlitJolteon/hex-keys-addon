@@ -1,6 +1,7 @@
 {
   "values": [
     "hexkeys:create_library_key",
-    "hexkeys:kleins_chest"
+    "hexkeys:kleins_chest",
+    "hexkeys:write_noetic_bookshelf"
   ]
 }
