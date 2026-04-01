@@ -29,8 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - Also writes to an empty akashic bookshelf, which is how you create new noetic shelves
 - Noetic Read (To Be Renamed)
     - Reads from a noetic bookshelf
-- Noetic Append (To Be Renamed)
-    - Appends new data to the end of a non-empty noetic shelf
+- Noetic Concat (To Be Renamed)
+    - Concat new data to the end of a non-empty noetic shelf
 - Noetic Eraste (To Be Renamed)
     - Erases a noetic bookshelf to allow it to be re-written to
 

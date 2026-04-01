@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 
 object NoeticBookshelfCostUtils {
     val BASE_WRITE_COST = 8 * MediaConstants.CRYSTAL_UNIT
-    val APPEND_COST_PER_ELEMENT = MediaConstants.DUST_UNIT / 8
+    val CONCAT_COST_PER_ELEMENT = MediaConstants.DUST_UNIT / 8
     val WRITE_COST_PER_ELEMENT = MediaConstants.DUST_UNIT / 8
     val ERASE_COST_PER_ELEMENT = MediaConstants.DUST_UNIT / 2
 
