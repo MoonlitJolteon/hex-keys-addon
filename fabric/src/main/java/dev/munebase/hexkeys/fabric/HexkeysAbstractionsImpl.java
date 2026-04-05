@@ -28,5 +28,6 @@ public class HexkeysAbstractionsImpl
 		}
 
 		Registry.register(HexIotaTypes.REGISTRY, new Identifier("hexkeys", "mindscape"), HexkeysIotaTypeRegistry.MINDSCAPE);
+		Registry.register(HexIotaTypes.REGISTRY, new Identifier("hexkeys", "noetic_bookshelf"), HexkeysIotaTypeRegistry.NOETIC_BOOKSHELF);
 	}
 }

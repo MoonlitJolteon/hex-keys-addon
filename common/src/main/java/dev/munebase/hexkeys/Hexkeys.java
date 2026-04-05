@@ -2,7 +2,9 @@ package dev.munebase.hexkeys;
 
 import dev.munebase.hexkeys.blocks.HexkeysBlocks;
 import dev.munebase.hexkeys.blocks.HexkeysBlockEntities;
+import dev.munebase.hexkeys.casting.environment.NoeticBookshelfAmbitHook;
 import dev.munebase.hexkeys.items.HexkeysItems;
+import dev.munebase.hexkeys.network.NoeticShelfKeybindNetworking;
 import dev.munebase.hexkeys.registry.DimensionRegistry;
 import dev.munebase.hexkeys.registry.HexkeysIotaTypeRegistry;
 import dev.munebase.hexkeys.registry.HexkeysPatternRegistry;
@@ -25,6 +27,8 @@ public class Hexkeys {
         LOGGER.info("Hex Keys says hello!");
 
         HexkeysIotaTypeRegistry.init();
+        NoeticBookshelfAmbitHook.init();
+        NoeticShelfKeybindNetworking.registerCommon();
         HexkeysPatternRegistry.init();
         HexkeysAbstractions.registerHexcastingEntries();
         HexkeysAbstractions.commonSetup();

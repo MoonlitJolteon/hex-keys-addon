@@ -4,8 +4,13 @@ import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import dev.munebase.hexkeys.casting.patterns.operators.OpGetCasterMindscape;
+import dev.munebase.hexkeys.casting.patterns.operators.OpGetNoeticBookshelfRef;
+import dev.munebase.hexkeys.casting.patterns.operators.OpReadNoeticBookshelf;
 import dev.munebase.hexkeys.casting.patterns.spells.OpAccessMindscape;
+import dev.munebase.hexkeys.casting.patterns.spells.OpAppendNoeticBookshelf;
+import dev.munebase.hexkeys.casting.patterns.spells.OpEraseNoeticBookshelf;
 import dev.munebase.hexkeys.casting.patterns.spells.OpVisitMindscape;
+import dev.munebase.hexkeys.casting.patterns.spells.OpWriteNoeticBookshelf;
 import dev.munebase.hexkeys.casting.patterns.spells.greater.OpKleinChest;
 import net.minecraft.util.Identifier;
 
@@ -22,6 +27,12 @@ public class HexkeysPatternRegistry {
     // IMPORTANT: be careful to keep the registration calls looking like this, or you'll have to edit the hexdoc pattern regex.
     public static HexPattern LIBRARY = register(HexPattern.fromAngles("qqqqqewwddada", HexDir.NORTH_WEST), "library", new OpAccessMindscape());
     public static HexPattern VISIT_LIBRARY = register(HexPattern.fromAngles("waqqqqqewwddada", HexDir.EAST), "visit_library", new OpVisitMindscape());
+    public static HexPattern READ_NOETIC_BOOKSHELF = register(HexPattern.fromAngles("qqqeee", HexDir.NORTH_EAST), "read_noetic_bookshelf", OpReadNoeticBookshelf.INSTANCE);
+    public static HexPattern GET_NOETIC_BOOKSHELF_REF = register(HexPattern.fromAngles("qeqeq", HexDir.WEST), "get_noetic_bookshelf_ref", OpGetNoeticBookshelfRef.INSTANCE);
+    public static HexPattern APPEND_NOETIC_BOOKSHELF = register(HexPattern.fromAngles("eeewww", HexDir.WEST), "append_noetic_bookshelf", OpAppendNoeticBookshelf.INSTANCE);
+    public static HexPattern ERASE_NOETIC_BOOKSHELF = register(HexPattern.fromAngles("wwweee", HexDir.EAST), "erase_noetic_bookshelf", OpEraseNoeticBookshelf.INSTANCE);
+
+    public static HexPattern WRITE_NOETIC_BOOKSHELF = registerPerWorld(HexPattern.fromAngles("eeeqqq", HexDir.SOUTH_EAST), "write_noetic_bookshelf", OpWriteNoeticBookshelf.INSTANCE);
     public static HexPattern CREATE_LIBRARY_KEY = registerPerWorld(HexPattern.fromAngles("ewdwewdeewdwewdewewdwe", HexDir.WEST), "create_library_key", OpGetCasterMindscape.INSTANCE);
     public static HexPattern KLEINS_CHEST = registerPerWorld(HexPattern.fromAngles("eawaeawqawwawqq", HexDir.SOUTH_EAST), "kleins_chest", new OpKleinChest());
     public static void init() {
