@@ -142,6 +142,9 @@ publishMods {
         requires {
             slug = "hexcasting"
         }
+        requires {
+            slug = "dynamickeybinds"
+        }
     }
 
     modrinth {
@@ -157,6 +160,9 @@ publishMods {
         }
         requires {
             slug = "hex-casting"
+        }
+        requires {
+            slug = "dynamickeybinds"
         }
     }
     

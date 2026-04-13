@@ -14,7 +14,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexkeys:write_noetic_bookshelf",
       "anchor": "hexkeys:write_noetic_bookshelf",
-      "input": "vec|Noetic Bookshelf, List",
+      "input": "vec|noetic shelf, list",
       "output": "",
       "text": "hexkeys.page.noetic_bookshelves.write"
     },
@@ -23,30 +23,30 @@
       "op_id": "hexkeys:get_noetic_bookshelf_ref",
       "anchor": "hexkeys:get_noetic_bookshelf_ref",
       "input": "vec",
-      "output": "Noetic Bookshelf",
+      "output": "noetic shelf",
       "text": "hexkeys.page.noetic_bookshelves.ref"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexkeys:read_noetic_bookshelf",
       "anchor": "hexkeys:read_noetic_bookshelf",
-      "input": "vec|Noetic Bookshelf",
-      "output": "Any",
+      "input": "vec|noetic shelf",
+      "output": "list",
       "text": "hexkeys.page.noetic_bookshelves.read"
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexkeys:append_noetic_bookshelf",
-      "anchor": "hexkeys:append_noetic_bookshelf",
-      "input": "vec|Noetic Bookshelf, Any",
+      "op_id": "hexkeys:concat_noetic_bookshelf",
+      "anchor": "hexkeys:concat_noetic_bookshelf",
+      "input": "vec|noetic shelf, list",
       "output": "",
-      "text": "hexkeys.page.noetic_bookshelves.append"
+      "text": "hexkeys.page.noetic_bookshelves.concat"
     },
     {
       "type": "hexcasting:pattern",
       "op_id": "hexkeys:erase_noetic_bookshelf",
       "anchor": "hexkeys:erase_noetic_bookshelf",
-      "input": "vec|Noetic Bookshelf",
+      "input": "vec|noetic shelf",
       "output": "",
       "text": "hexkeys.page.noetic_bookshelves.erase"
     }

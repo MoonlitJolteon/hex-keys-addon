@@ -8,7 +8,7 @@ modId = "hexkeys"
 version = "${version}"
 displayName = "Hex Keys"
 logoFile = "hexkeys.png"
-authors = "MoonlitJolteon"
+authors = "Moonlit Productions, SnowPaws"
 description = '''
 Hex Keys: Accessing your inner thoughts
 '''

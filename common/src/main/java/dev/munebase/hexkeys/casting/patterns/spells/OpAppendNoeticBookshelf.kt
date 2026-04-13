@@ -10,7 +10,7 @@ import dev.munebase.hexkeys.casting.patterns.mishaps.MishapNoeticBookshelfEmpty
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 
-object OpAppendNoeticBookshelf : SpellAction {
+object OpConcatNoeticBookshelf : SpellAction {
     override val argc = 2
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
@@ -29,7 +29,7 @@ object OpAppendNoeticBookshelf : SpellAction {
 
         val combinedList = ListIota(combined)
         val totalElements = NoeticBookshelfCostUtils.countTotalElements(value)
-        val cost = totalElements * NoeticBookshelfCostUtils.APPEND_COST_PER_ELEMENT
+        val cost = totalElements * NoeticBookshelfCostUtils.CONCAT_COST_PER_ELEMENT
         return SpellAction.Result(Spell(target.world.registryKey.value, target.pos, combinedList), cost, listOf())
     }
 
