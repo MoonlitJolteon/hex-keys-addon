@@ -12,7 +12,7 @@ name = "hexdoc-hexkeys"
 description = "Python web book docgen and hexdoc plugin for Hex Keys."
 readme = "doc/README.md"
 authors = [
-    { name="MoonlitJolteon" },
+    { name="Moonlit Productions" },
 ]
 keywords = ["hexdoc"]
 requires-python = ">=3.11"
