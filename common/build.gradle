@@ -25,7 +25,7 @@ dependencies {
     modCompileOnly "vazkii.patchouli:Patchouli-xplat:$minecraftVersion-$patchouliVersion"
     modCompileOnly("maven.modrinth:dynamickeybinds:${dynamicKeybindsVersion}-fabric") { transitive = false }
     // mavenLocal for local development alongside dynamickeybinds:
-    // modCompileOnly("dev.munebase.dynamickeybinds:dynamickeybinds-common-1.20.1:${dynamicKeybindsVersion}") { transitive = false }
+    // modCompileOnly("dev.munebase.dynamickeybinds:dynamickeybinds-fabric-1.20.1-fabric:${dynamicKeybindsVersion}-fabric") { transitive = false }
 }
 
 publishing {

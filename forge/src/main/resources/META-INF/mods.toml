@@ -42,8 +42,15 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexkeys]]
+modId = "patchouli"
+mandatory = true
+versionRange = "[1.20.1-84,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.hexkeys]]
 modId = "dynamickeybinds"
 mandatory = true
-versionRange = "[0.1.0,)"
+versionRange = "[0.1.2,)"
 ordering = "NONE"
 side = "BOTH"

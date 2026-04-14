@@ -34,6 +34,7 @@
     "fabric-language-kotlin": ">=1.10.18+kotlin.1.9.22",
     "architectury": ">=9.2.14",
     "hexcasting": ">=0.11.3",
-    "dynamickeybinds": ">=0.1.0"
+    "patchouli": ">=1.20.1-84",
+    "dynamickeybinds": ">=0.1.2"
   }
 }

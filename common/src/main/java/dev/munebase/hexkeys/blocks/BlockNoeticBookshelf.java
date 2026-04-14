@@ -5,6 +5,7 @@ import dev.munebase.dynamickeybinds.DynamicKeyRegistryProvider;
 import dev.munebase.dynamickeybinds.action.DynamicKeybindAction;
 import dev.munebase.dynamickeybinds.model.DisplayArg;
 import dev.munebase.dynamickeybinds.model.DisplaySpec;
+import dev.munebase.dynamickeybinds.server.DynamicKeyServerApi;
 import dev.munebase.hexkeys.Hexkeys;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -16,6 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
@@ -43,6 +45,9 @@ public class BlockNoeticBookshelf extends Block implements BlockEntityProvider
 	private static final String NOETIC_CATEGORY = "hexkeys.noetic_bookshelf";
 	private static final int DISPLAY_CODE_LENGTH = 6;
 	private static final String DISPLAY_CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+	public record NoeticKeybindData(String keybindId, String displayCode, String dimensionId, BlockPos pos) {
+	}
 
 	public BlockNoeticBookshelf(AbstractBlock.Settings settings) {
 		super(settings);
@@ -98,13 +103,35 @@ public class BlockNoeticBookshelf extends Block implements BlockEntityProvider
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
 		super.onPlaced(world, pos, state, placer, itemStack);
-		initializeNoeticKeybind(world, pos);
+		if (!world.isClient && placer instanceof ServerPlayerEntity serverPlayer) {
+			initializeNoeticKeybind(world, pos, serverPlayer);
+		}
 	}
 
 	public static void initializeNoeticKeybind(World world, BlockPos pos) {
+		if (world.isClient) {
+			return;
+		}
+	}
+
+	public static void initializeNoeticKeybind(World world, BlockPos pos, ServerPlayerEntity serverPlayer) {
+		if (world.isClient) {
+			return;
+		}
+
+		NoeticKeybindData keybindData = ensureNoeticKeybindData(world, pos);
+		if (keybindData == null) {
+			return;
+		}
+
+		registerNoeticKeybindOnServer(serverPlayer, keybindData);
+	}
+
+	@Nullable
+	public static NoeticKeybindData ensureNoeticKeybindData(World world, BlockPos pos) {
 		var blockEntity = world.getBlockEntity(pos);
 		if (!(blockEntity instanceof BlockEntityNoeticBookshelf noeticBookshelfEntity)) {
-			return;
+			return null;
 		}
 
 		String keybindId = noeticBookshelfEntity.getKeybindId();
@@ -114,12 +141,20 @@ public class BlockNoeticBookshelf extends Block implements BlockEntityProvider
 		}
 
 		String displayCode = getDisplayCode(world, pos, noeticBookshelfEntity);
+		String dimensionId = world.getRegistryKey().getValue().toString();
+		return new NoeticKeybindData(keybindId, displayCode, dimensionId, pos.toImmutable());
+	}
+
+	public static void registerNoeticKeybindFromData(String keybindId, String displayCode, String dimensionId, BlockPos pos) {
+		if (keybindId == null || keybindId.isBlank()) {
+			return;
+		}
 
 
 		try {
 			DynamicKeyRegistry registry = DynamicKeyRegistryProvider.getRegistry();
 			if (registry.getKeyBindById(keybindId) == null) {
-				Optional<DynamicKeybindAction> action = makeNoeticKeybindAction(world, pos, keybindId);
+				Optional<DynamicKeybindAction> action = makeNoeticKeybindAction(dimensionId, pos, keybindId);
 				DisplaySpec displaySpec = DisplaySpec.ofTranslationKeyWithFallbackAndArgs(
 					"key.hexkeys.noetic_bookshelf",
 					"Noetic Bookshelf %s",
@@ -129,6 +164,31 @@ public class BlockNoeticBookshelf extends Block implements BlockEntityProvider
 			}
 		} catch (IllegalStateException | IllegalArgumentException e) {
 			Hexkeys.LOGGER.warn("Failed to register Noetic Bookshelf keybind", e);
+		}
+	}
+
+	public static void registerNoeticKeybindOnServer(ServerPlayerEntity serverPlayer, NoeticKeybindData keybindData) {
+		if (keybindData == null || keybindData.keybindId() == null || keybindData.keybindId().isBlank()) {
+			return;
+		}
+
+		try {
+			Optional<DynamicKeybindAction> action = makeNoeticKeybindAction(keybindData.dimensionId(), keybindData.pos(), keybindData.keybindId());
+			DisplaySpec displaySpec = DisplaySpec.ofTranslationKeyWithFallbackAndArgs(
+				"key.hexkeys.noetic_bookshelf",
+				"Noetic Bookshelf %s",
+				List.of(new DisplayArg.StringArg(keybindData.displayCode()))
+			);
+			DynamicKeyServerApi.registerForPlayer(
+				serverPlayer,
+				keybindData.keybindId(),
+				GLFW.GLFW_KEY_UNKNOWN,
+				NOETIC_CATEGORY,
+				action,
+				displaySpec
+			);
+		} catch (IllegalStateException | IllegalArgumentException e) {
+			Hexkeys.LOGGER.warn("Failed to register Noetic Bookshelf keybind on server", e);
 		}
 	}
 
@@ -151,6 +211,9 @@ public class BlockNoeticBookshelf extends Block implements BlockEntityProvider
 	}
 
 	private static void unregisterNoeticKeybind(World world, BlockPos pos) {
+		if (!world.isClient) {
+			return;
+		}
 
 		try {
 			DynamicKeyRegistry registry = DynamicKeyRegistryProvider.getRegistry();
@@ -202,10 +265,10 @@ public class BlockNoeticBookshelf extends Block implements BlockEntityProvider
 		return displayCode;
 	}
 
-	private static Optional<DynamicKeybindAction> makeNoeticKeybindAction(World world, BlockPos pos, String keybindId) {
+	private static Optional<DynamicKeybindAction> makeNoeticKeybindAction(String dimensionId, BlockPos pos, String keybindId) {
 		NbtCompound data = new NbtCompound();
 		data.putString("KeyID", keybindId);
-		data.putString("Dimension", world.getRegistryKey().getValue().toString());
+		data.putString("Dimension", dimensionId);
 		data.putInt("X", pos.getX());
 		data.putInt("Y", pos.getY());
 		data.putInt("Z", pos.getZ());

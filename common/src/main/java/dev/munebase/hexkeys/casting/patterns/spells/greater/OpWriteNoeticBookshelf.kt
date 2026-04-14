@@ -108,13 +108,17 @@ object OpWriteNoeticBookshelf : SpellAction {
                         noeticState = noeticState.with(BlockNoeticBookshelf.FACING, state.get(BlockAkashicBookshelf.FACING))
                     }
                     world.setBlockState(pos, noeticState, 3)
-                    // Register the keybind on the server (and let DynamicKeybinds sync to client)
-                    BlockNoeticBookshelf.initializeNoeticKeybind(world, pos)
                     shelf = world.getBlockEntity(pos) as? BlockEntityNoeticBookshelf
                 }
             }
 
             shelf ?: return
+
+            val casterPlayer = env.castingEntity as? ServerPlayerEntity
+            if (casterPlayer != null) {
+                BlockNoeticBookshelf.initializeNoeticKeybind(world, pos, casterPlayer)
+            }
+
             shelf.setStoredIota(value)
         }
     }
